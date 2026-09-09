@@ -14,13 +14,20 @@ export function renderAdmin(){
   const v=$('#view-admin');
   if(!isAdmin()){v.innerHTML=emptyState('Acesso restrito à administração.');return}
   const pc=state.data.players.filter(p=>p.status==='pending').length;
-  const tabs=[['dashboard','Visão geral'],['requests',`Solicitações${pc?` (${pc})`:''}`],['players','Jogadores'],['events','Agenda'],['news','Notícias'],['team','O Time']];
-  v.innerHTML=`<div class="page-head"><div><span class="kicker">Gestão do clube</span><h1>Painel Administrativo</h1><p>Gerencie jogadores, escalação, agenda, notícias e informações oficiais.</p></div></div><div class="admin-layout"><aside class="card admin-sidebar">${tabs.map(([id,l])=>`<button class="admin-tab ${state.adminTab===id?'active':''}" data-admin-tab="${id}">${l}</button>`).join('')}</aside><section class="admin-panel">${tabHtml()}</section></div>`;
+  const tabs=[['dashboard','Visão geral'],['coach','Perfil do Técnico'],['requests',`Solicitações${pc?` (${pc})`:''}`],['players','Jogadores'],['events','Agenda'],['news','Notícias'],['team','O Time']];
+  v.innerHTML=`<div class="page-head"><div><span class="kicker">Gestão do clube</span><h1>Painel Administrativo</h1><p>Gerencie o perfil do técnico, jogadores, escalação, agenda, notícias e informações oficiais.</p></div></div><div class="admin-layout"><aside class="card admin-sidebar">${tabs.map(([id,l])=>`<button class="admin-tab ${state.adminTab===id?'active':''}" data-admin-tab="${id}">${l}</button>`).join('')}</aside><section class="admin-panel">${tabHtml()}</section></div>`;
+}
+
+function coachTab(){
+  const c=state.data.coach||{},photo=safeImageSrc(c.photo||'');
+  return `<article class="card coach-admin-card"><div class="coach-admin-head"><div class="coach-admin-avatar">${photo?`<img src="${escapeHtml(photo)}" alt="Foto de ${escapeHtml(c.name||'Técnico')}">`:`<span>TEC</span>`}</div><div><span class="kicker">Conta administrativa</span><h2>${escapeHtml(c.name||'Técnico do Real Império FC')}</h2><p class="form-help">Este perfil representa o Técnico do Real Império FC e aparece publicamente na área Elenco.</p></div></div><form id="coach-form"><div class="form-grid"><div class="field full"><label>Nome do Técnico *</label><input name="name" value="${escapeHtml(c.name||'')}" maxlength="80" required></div><div class="field full"><label>WhatsApp / contato</label><input name="whatsapp" inputmode="tel" value="${escapeHtml(c.whatsapp||'')}"></div><div class="field full"><label>Descrição</label><textarea name="bio" placeholder="Ex.: Técnico responsável pela equipe, experiência, filosofia de trabalho...">${escapeHtml(c.bio||'')}</textarea></div><div class="field full"><label>Adicionar / trocar foto</label><input name="photoFile" type="file" accept="image/*"></div>${photo?`<label class="check-row full"><input type="checkbox" name="removePhoto" value="1"><span>Remover foto atual</span></label>`:''}</div><div class="form-actions"><button class="btn btn-gold" type="submit">Salvar perfil do Técnico</button></div></form></article>`;
 }
 
 function tabHtml(){
   const d=state.data;
-  if(state.adminTab==='dashboard')return `<div class="grid grid-2"><div class="card card-accent"><h2>Resumo</h2><div class="stats admin-stats"><div class="stat-card"><span>Jogadores</span><strong>${d.players.filter(p=>p.status==='approved').length}</strong></div><div class="stat-card"><span>Pendentes</span><strong>${d.players.filter(p=>p.status==='pending').length}</strong></div><div class="stat-card"><span>Eventos</span><strong>${d.events.length}</strong></div><div class="stat-card"><span>Notícias</span><strong>${d.news.length}</strong></div></div></div><div class="card"><h2>Ações rápidas</h2><div class="form-actions admin-quick-actions"><button class="btn btn-gold" data-action="new-player">Adicionar jogador</button><button class="btn btn-red" data-admin-tab="events">Marcar jogo/treino</button><button class="btn btn-dark" data-admin-tab="news">Publicar notícia</button></div></div></div>`;
+  if(state.adminTab==='dashboard')return `<div class="grid grid-2"><div class="card card-accent"><h2>Resumo</h2><div class="stats admin-stats"><div class="stat-card"><span>Jogadores</span><strong>${d.players.filter(p=>p.status==='approved').length}</strong></div><div class="stat-card"><span>Pendentes</span><strong>${d.players.filter(p=>p.status==='pending').length}</strong></div><div class="stat-card"><span>Eventos</span><strong>${d.events.length}</strong></div><div class="stat-card"><span>Notícias</span><strong>${d.news.length}</strong></div></div></div><div class="card"><h2>Ações rápidas</h2><div class="form-actions admin-quick-actions"><button class="btn btn-gold" data-admin-tab="coach">Editar perfil do Técnico</button><button class="btn btn-red" data-admin-tab="events">Marcar jogo/treino</button><button class="btn btn-dark" data-admin-tab="news">Publicar notícia</button></div></div></div>`;
+
+  if(state.adminTab==='coach')return coachTab();
 
   if(state.adminTab==='requests'){
     const a=d.players.filter(p=>p.status==='pending').sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
@@ -33,7 +40,7 @@ function tabHtml(){
 
   if(state.adminTab==='news')return `<div class="admin-toolbar"><div><h2>Notícias</h2><p class="form-help">Adicione e modifique notícias sobre o time.</p></div><button class="btn btn-gold btn-sm" data-action="new-news">+ Nova notícia</button></div><div class="grid">${d.news.length?[...d.news].sort((a,b)=>b.date.localeCompare(a.date)).map(n=>`<article class="card"><time class="form-help">${formatDate(n.date,{day:'2-digit',month:'long',year:'numeric'})}</time><h3>${escapeHtml(n.title)}</h3><p class="team-story">${escapeHtml(n.body)}</p><div class="form-actions"><button class="btn btn-dark btn-sm" data-action="edit-news" data-id="${n.id}">Editar</button><button class="btn btn-danger btn-sm" data-action="delete-news" data-id="${n.id}">Excluir</button></div></article>`).join(''):emptyState('Nenhuma notícia publicada.')}</div>`;
 
-  if(state.adminTab==='team')return `<article class="card"><h2>Informações do time</h2><form id="team-form"><div class="form-grid"><div class="field"><label>Nome</label><input name="name" value="${escapeHtml(d.team.name)}" required></div><div class="field"><label>Bairro</label><input name="neighborhood" value="${escapeHtml(d.team.neighborhood)}"></div><div class="field"><label>Cidade</label><input name="city" value="${escapeHtml(d.team.city)}"></div><div class="field"><label>Fundação</label><input name="founded" value="${escapeHtml(d.team.founded)}"></div><div class="field full"><label>Local de treino</label><input name="trainingPlace" value="${escapeHtml(d.team.trainingPlace)}"></div><div class="field full"><label>Administrador geral (público)</label><input name="generalAdmin" type="email" value="${escapeHtml(d.team.generalAdmin)}"></div><div class="field full"><label>Descrição</label><textarea name="description">${escapeHtml(d.team.description)}</textarea></div></div><div class="form-actions"><button class="btn btn-gold">Salvar informações</button></div></form></article>`;
+  if(state.adminTab==='team')return `<article class="card"><h2>Informações do time</h2><form id="team-form"><div class="form-grid"><div class="field"><label>Nome</label><input name="name" value="${escapeHtml(d.team.name)}" required></div><div class="field"><label>Bairro</label><input name="neighborhood" value="${escapeHtml(d.team.neighborhood)}"></div><div class="field"><label>Cidade</label><input name="city" value="${escapeHtml(d.team.city)}"></div><div class="field"><label>Fundação</label><input name="founded" value="${escapeHtml(d.team.founded)}"></div><div class="field full"><label>Local de treino</label><input name="trainingPlace" value="${escapeHtml(d.team.trainingPlace)}"></div><div class="field full"><label>Nome do Técnico</label><input name="coachName" value="${escapeHtml(d.coach?.name||'')}" placeholder="Nome do responsável técnico"></div><div class="field full"><label>Descrição</label><textarea name="description">${escapeHtml(d.team.description)}</textarea></div></div><div class="form-actions"><button class="btn btn-gold">Salvar informações</button></div></form></article>`;
   return '';
 }
 
@@ -101,6 +108,16 @@ export async function saveAdminForm(form){
     logAction(`Jogador salvo: ${p.name}`);
   }
 
+  if(form.id==='coach-form'){
+    const c=d.coach||(d.coach={name:'',photo:'',whatsapp:'',bio:'',role:'Técnico'}),f=fd.get('photoFile');
+    let photo=c.photo||'';
+    if(fd.get('removePhoto'))photo='';
+    else if(f?.size)photo=await compressImage(f,1000,.84);
+    Object.assign(c,{name:String(fd.get('name')||'').trim(),whatsapp:String(fd.get('whatsapp')||'').trim(),bio:String(fd.get('bio')||'').trim(),photo,role:'Técnico'});
+    if(!c.name)throw new Error('Informe o nome do Técnico.');
+    logAction(`Perfil do Técnico atualizado: ${c.name}`);
+  }
+
   if(form.id==='event-form'){
     let x=id?d.events.find(x=>x.id===id):null;
     if(!x){x={id:uid('evt')};d.events.push(x)}
@@ -116,7 +133,8 @@ export async function saveAdminForm(form){
   }
 
   if(form.id==='team-form'){
-    d.team={...d.team,name:String(fd.get('name')).trim(),neighborhood:String(fd.get('neighborhood')).trim(),city:String(fd.get('city')).trim(),founded:String(fd.get('founded')).trim(),trainingPlace:String(fd.get('trainingPlace')).trim(),generalAdmin:String(fd.get('generalAdmin')).trim(),description:String(fd.get('description')).trim()};
+    d.team={...d.team,name:String(fd.get('name')).trim(),neighborhood:String(fd.get('neighborhood')).trim(),city:String(fd.get('city')).trim(),founded:String(fd.get('founded')).trim(),trainingPlace:String(fd.get('trainingPlace')).trim(),description:String(fd.get('description')).trim()};
+    d.coach={...(d.coach||{}),name:String(fd.get('coachName')||'').trim(),role:'Técnico'};
     logAction('Informações do time atualizadas');
   }
   saveData();
