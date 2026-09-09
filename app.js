@@ -104,7 +104,8 @@ async function login(form){
 function openNews(id){
   const n=state.data.news.find(x=>x.id===id);
   if(!n)return;
-  openModal(`<article class="news-modal"><span class="kicker">Notícia do Real Império FC</span><h2>${escapeHtml(n.title)}</h2><time>${formatDate(n.date,{day:'2-digit',month:'long',year:'numeric'})}</time><div class="news-modal-body">${escapeHtml(n.body).replace(/\n/g,'<br>')}</div></article>`);
+  const image=String(n.image||'');
+  openModal(`<article class="news-modal"><span class="kicker">Notícia do Real Império FC</span><h2>${escapeHtml(n.title)}</h2><time>${formatDate(n.date,{day:'2-digit',month:'long',year:'numeric'})}</time>${image?`<img class="news-modal-image" src="${escapeHtml(image)}" alt="Imagem da notícia ${escapeHtml(n.title)}">`:''}<div class="news-modal-body">${escapeHtml(n.body).replace(/\n/g,'<br>')}</div></article>`);
 }
 
 function remove(kind,id){
