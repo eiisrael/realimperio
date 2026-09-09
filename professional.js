@@ -1,4 +1,4 @@
-const emojiPattern=/[\p{Extended_Pictographic}\uFE0F]/gu;
+const emojiPattern=/[⚽⚔🕒📍\uFE0F]/g;
 
 function cleanTextNode(node){
   if(node.nodeType!==Node.TEXT_NODE)return;
