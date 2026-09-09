@@ -31,10 +31,10 @@ async function register(form){
   state.data.players.push(p);
   logAction(`Nova solicitação: ${name}`);
   saveData();
-  saveSession({role:'player',playerId:p.id,name});
+  saveSession(null);
   refresh();
   showView('account');
-  toast('Solicitação enviada para aprovação.','success');
+  toast('Cadastro enviado. Sua conta está em análise técnica.','success');
 }
 
 async function savePlayerAccount(form){
@@ -92,6 +92,8 @@ async function login(form){
   const playerByEmail=state.data.players.find(p=>p.email.toLowerCase()===email);
   if(!playerByEmail)throw new Error('Cadastre-se para poder acessar seu perfil.');
   if(playerByEmail.passwordHash!==ph)throw new Error('E-mail ou senha inválidos.');
+  if(playerByEmail.status==='pending')throw new Error('Sua conta está em análise técnica. Aguarde a aprovação do administrador.');
+  if(playerByEmail.status==='rejected')throw new Error('Seu cadastro não está autorizado para acesso. Entre em contato com a administração.');
 
   saveSession({role:'player',playerId:playerByEmail.id,name:playerByEmail.name});
   refresh();
