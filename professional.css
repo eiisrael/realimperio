@@ -1,0 +1,298 @@
+/* Ajustes profissionais gerais — Real Império FC */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell {
+  flex: 1 0 auto;
+  width: min(1180px, calc(100% - 32px));
+}
+
+.site-footer { flex: 0 0 auto; }
+
+/* Resumo da home agora fica acima do destaque principal */
+.home-summary {
+  margin: 0 0 18px;
+}
+.home-summary .stat-card {
+  background: linear-gradient(150deg, rgba(13,11,11,.94), rgba(22,16,16,.91));
+  border-color: rgba(227,179,92,.14);
+}
+.home-summary .stat-name {
+  font-size: 1.12rem;
+  line-height: 1.25;
+}
+
+/* Notícias e compromissos lado a lado */
+.home-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 28px;
+}
+.home-column {
+  min-width: 0;
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(10,9,9,.72);
+  border: 1px solid rgba(255,255,255,.07);
+  box-shadow: 0 16px 40px rgba(0,0,0,.18);
+  backdrop-filter: blur(8px);
+}
+.home-column .section-title {
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+.home-news-list,
+.home-events-list {
+  display: grid;
+  gap: 12px;
+}
+.news-card-button {
+  width: 100%;
+  display: block;
+  text-align: left;
+  color: var(--cream);
+  cursor: pointer;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.news-card-button:hover,
+.news-card-button:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(227,179,92,.34);
+  background: rgba(27,19,19,.96);
+  outline: none;
+}
+.news-read-more {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--gold-2);
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.event-card-compact {
+  padding: 15px;
+  gap: 12px;
+}
+.event-card-compact .date-chip {
+  width: 58px;
+  min-width: 58px;
+  height: 64px;
+}
+.event-card-compact .date-chip strong { font-size: 1.45rem; }
+.event-card-compact .event-meta h3 { font-size: 1rem; }
+.event-card-compact .event-meta p { font-size: .78rem; }
+
+/* Modal de notícia */
+.news-modal { padding: 5px 4px 4px; }
+.news-modal h2 {
+  margin: 10px 44px 4px 0;
+  font-family: Oswald, sans-serif;
+  font-size: clamp(1.7rem, 4vw, 2.45rem);
+  line-height: 1.05;
+}
+.news-modal time {
+  display: block;
+  color: var(--gold-2);
+  font-size: .8rem;
+  margin-bottom: 18px;
+}
+.news-modal-body {
+  color: #e9dfd0;
+  line-height: 1.8;
+  font-size: .95rem;
+  white-space: normal;
+}
+
+/* Elenco sem emojis */
+.empty-mark {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 8px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(227,179,92,.35);
+  background: rgba(184,24,31,.12);
+  color: var(--gold-2);
+  font-family: Oswald, sans-serif;
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+.player-placeholder {
+  font-size: 1rem;
+}
+.player-placeholder span {
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(184,24,31,.15);
+  border: 1px solid rgba(227,179,92,.28);
+  color: var(--gold-2);
+  font-family: Oswald, sans-serif;
+  font-size: 1.45rem;
+  letter-spacing: .05em;
+}
+.player-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+/* Minha Conta — painel de configurações */
+.account-settings-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 10px;
+}
+.account-profile-card {
+  text-align: center;
+  padding: 24px;
+}
+.account-profile-card h2 {
+  margin: 15px 0 10px;
+  font-size: 1.45rem;
+}
+.account-profile-photo {
+  width: 156px;
+  height: 156px;
+  margin: 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--gold);
+  box-shadow: 0 16px 40px rgba(0,0,0,.32), 0 0 0 6px rgba(227,179,92,.07);
+}
+.account-profile-placeholder {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #3b1518, #17100f);
+  color: var(--gold-2);
+  font-family: Oswald, sans-serif;
+  font-size: 2.2rem;
+  letter-spacing: .05em;
+}
+.account-badges {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+.account-summary {
+  display: grid;
+  gap: 0;
+  margin: 0 0 20px;
+  text-align: left;
+}
+.account-summary div {
+  display: grid;
+  grid-template-columns: 90px minmax(0,1fr);
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.account-summary dt {
+  color: var(--muted);
+  font-size: .75rem;
+}
+.account-summary dd {
+  margin: 0;
+  text-align: right;
+  color: #f3e8d6;
+  font-size: .78rem;
+  overflow-wrap: anywhere;
+}
+.account-settings-card { padding: 24px; }
+.settings-heading { margin-bottom: 20px; }
+.settings-heading h2 {
+  margin: 7px 0 5px;
+  font-family: Oswald, sans-serif;
+  font-size: 1.6rem;
+}
+.settings-heading p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: .84rem;
+}
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 12px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  background: rgba(255,255,255,.035);
+  color: var(--muted);
+  font-size: .8rem;
+}
+.check-row input { width: auto; }
+.check-row.full { grid-column: 1 / -1; }
+.account-actions { justify-content: center; }
+
+/* Administração de jogador */
+.admin-player-preview {
+  width: 116px;
+  height: 116px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--gold);
+  background: #181111;
+}
+.admin-player-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.admin-stats {
+  grid-template-columns: repeat(2,1fr) !important;
+  margin-bottom: 0;
+}
+.admin-quick-actions { justify-content: flex-start; }
+
+/* Navegação móvel sem símbolos/emojis */
+@media (max-width: 700px) {
+  .mobile-nav-item {
+    min-height: 44px;
+    padding: 8px 3px;
+  }
+  .mobile-nav-item small {
+    font-size: .68rem;
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 900px) {
+  .home-columns { grid-template-columns: 1fr; }
+  .account-settings-layout { grid-template-columns: 1fr; }
+  .account-profile-card { width: min(520px, 100%); margin: 0 auto; }
+}
+
+@media (max-width: 700px) {
+  .app-shell { flex: 1 0 auto; }
+  .home-summary { margin: 0 0 12px; }
+  .home-column { padding: 14px; border-radius: 17px; }
+  .home-column .section-title { gap: 10px; }
+  .home-column .section-title .btn { width: 100%; }
+  .account-settings-card,
+  .account-profile-card { padding: 16px; }
+  .account-profile-photo { width: 124px; height: 124px; }
+  .check-row.full { grid-column: auto; }
+}
+
+@media (max-width: 420px) {
+  .home-summary .stat-name { font-size: .96rem; }
+  .event-card-compact { padding: 12px; }
+  .event-card-compact .date-chip { width: 52px; min-width: 52px; height: 58px; }
+}
