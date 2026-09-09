@@ -4,12 +4,14 @@ export const ADMIN_CONFIG_KEY = 'realImperioFC.localAdmins.v1';
 
 const DEFAULT_LINEUP = {
   formation: '4-3-3',
+  baseFormation: '4-3-3',
+  customized: false,
   slots: {
-    lw: null, st: null, rw: null,
-    lcm: null, cm: null, rcm: null,
-    lb: null, lcb: null, rcb: null, rb: null,
+    p1: null, p2: null, p3: null, p4: null, p5: null,
+    p6: null, p7: null, p8: null, p9: null, p10: null,
     gk: null
-  }
+  },
+  coordinates: {}
 };
 
 export const DEFAULT_DATA = {
@@ -53,8 +55,10 @@ export function loadData(){
       news:Array.isArray(saved.news)?saved.news:clone(DEFAULT_DATA.news),
       players:Array.isArray(saved.players)?saved.players.map(p=>({...p,goals:Math.max(0,Number.parseInt(p.goals,10)||0)})):[],
       lineup:{
-        formation:savedLineup.formation||DEFAULT_LINEUP.formation,
-        slots:{...clone(DEFAULT_LINEUP.slots), ...(savedLineup.slots||{})}
+        ...clone(DEFAULT_LINEUP),
+        ...savedLineup,
+        slots:{...clone(DEFAULT_LINEUP.slots), ...(savedLineup.slots||{})},
+        coordinates:{...(savedLineup.coordinates||{})}
       },
       gallery:Array.isArray(saved.gallery)?saved.gallery:clone(DEFAULT_DATA.gallery),
       audit:Array.isArray(saved.audit)?saved.audit:[]
