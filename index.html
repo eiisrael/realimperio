@@ -76,6 +76,22 @@
       color: var(--white);
       border-bottom-color: var(--gold);
     }
+    .login-register-hint {
+      margin: 14px 0 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: .8rem;
+      line-height: 1.5;
+    }
+    .login-register-hint button {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--gold-2);
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
     @media (max-width: 720px) {
       .site-footer { margin-bottom: 72px; }
       .site-footer-inner {
@@ -90,6 +106,58 @@
         text-align: left;
         white-space: normal;
         padding-left: 54px;
+      }
+
+      #view-admin .page-head {
+        margin-bottom: 14px;
+      }
+      #view-admin .page-head h1 {
+        font-size: 2rem;
+      }
+      #view-admin .admin-layout {
+        display: block !important;
+      }
+      #view-admin .admin-sidebar {
+        position: static !important;
+        top: auto !important;
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-flow: row !important;
+        grid-auto-columns: auto !important;
+        gap: 8px !important;
+        overflow: visible !important;
+        padding: 10px !important;
+        margin: 0 0 14px !important;
+        border-radius: 16px !important;
+      }
+      #view-admin .admin-tab {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 44px;
+        padding: 10px 8px !important;
+        border-radius: 10px !important;
+        text-align: center !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        line-height: 1.2 !important;
+        font-size: .74rem !important;
+      }
+      #view-admin .admin-panel {
+        width: 100%;
+        min-width: 0;
+      }
+      #view-admin .admin-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      #view-admin .admin-toolbar > .btn {
+        width: 100%;
+      }
+    }
+    @media (max-width: 350px) {
+      #view-admin .admin-sidebar {
+        grid-template-columns: 1fr !important;
       }
     }
   </style>
