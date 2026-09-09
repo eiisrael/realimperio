@@ -169,5 +169,5 @@ $('#modal-close').onclick=closeModal;
 $('#modal').onclick=e=>{if(e.target===$('#modal'))closeModal()};
 
 const h=location.hash.slice(1);
-if(['home','agenda','team','players','extras','register','account','admin'].includes(h))state.currentView=h;
+if(['home','agenda','team','lineup','players','extras','register','account','admin'].includes(h))state.currentView=h;
 refresh();
