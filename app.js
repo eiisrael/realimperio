@@ -72,17 +72,28 @@ async function savePlayerAccount(form){
 }
 
 async function login(form){
-  const f=new FormData(form),email=String(f.get('email')).trim().toLowerCase(),pass=String(f.get('password')),eh=await sha256(email),ph=await sha256(pass),admin=getLocalAdmins().find(a=>a.emailHash===eh&&a.passwordHash===ph);
-  if(admin){
-    saveSession({role:admin.role,name:admin.role==='superadmin'?'Administração':'Administrador Geral'});
+  const f=new FormData(form);
+  const email=String(f.get('email')).trim().toLowerCase();
+  const pass=String(f.get('password'));
+  const eh=await sha256(email);
+  const ph=await sha256(pass);
+  const admins=getLocalAdmins();
+  const adminByEmail=admins.find(a=>a.emailHash===eh);
+
+  if(adminByEmail){
+    if(adminByEmail.passwordHash!==ph)throw new Error('E-mail ou senha inválidos.');
+    saveSession({role:adminByEmail.role,name:adminByEmail.role==='superadmin'?'Administração':'Administrador Geral'});
     refresh();
     showView('admin');
     toast('Acesso administrativo liberado.','success');
     return;
   }
-  const p=state.data.players.find(p=>p.email.toLowerCase()===email&&p.passwordHash===ph);
-  if(!p)throw new Error('E-mail ou senha inválidos.');
-  saveSession({role:'player',playerId:p.id,name:p.name});
+
+  const playerByEmail=state.data.players.find(p=>p.email.toLowerCase()===email);
+  if(!playerByEmail)throw new Error('Cadastre-se para poder acessar seu perfil.');
+  if(playerByEmail.passwordHash!==ph)throw new Error('E-mail ou senha inválidos.');
+
+  saveSession({role:'player',playerId:playerByEmail.id,name:playerByEmail.name});
   refresh();
   showView('account');
   toast('Login realizado.','success');
