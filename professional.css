@@ -358,7 +358,114 @@ body {
   border: 0 !important;
 }
 
+/* Perfil público e administrativo do Técnico */
+.coach-public-card {
+  display: grid;
+  grid-template-columns: 150px minmax(0,1fr);
+  align-items: center;
+  gap: 22px;
+  max-width: 760px;
+  background: linear-gradient(145deg, rgba(35,19,18,.96), rgba(12,10,10,.94));
+  border-color: rgba(227,179,92,.26);
+}
+.coach-public-avatar,
+.coach-admin-avatar {
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #3b1518, #17100f);
+  border: 3px solid var(--gold);
+  color: var(--gold-2);
+  font-family: Oswald,sans-serif;
+  letter-spacing: .05em;
+}
+.coach-public-avatar { width: 132px; height: 132px; }
+.coach-public-avatar img,
+.coach-admin-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.coach-public-avatar span { font-size: 1.8rem; }
+.coach-public-body h3 {
+  margin: 7px 0 3px;
+  font-family: Oswald,sans-serif;
+  font-size: 1.55rem;
+}
+.coach-role {
+  color: var(--gold-2);
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.coach-public-body p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.coach-contact {
+  display: block;
+  margin-top: 10px;
+  color: #e8ddcb;
+  font-size: .8rem;
+}
+.coach-public-empty { opacity: .86; }
+.coach-admin-card { padding: 24px; }
+.coach-admin-head {
+  display: grid;
+  grid-template-columns: 112px minmax(0,1fr);
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 22px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.coach-admin-avatar {
+  width: 100px;
+  height: 100px;
+}
+.coach-admin-avatar span { font-size: 1.55rem; }
+.coach-admin-head h2 {
+  margin: 7px 0 4px;
+  font-family: Oswald,sans-serif;
+}
+.account-admin-photo {
+  width: 92px;
+  height: 92px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--gold);
+  box-shadow: 0 12px 30px rgba(0,0,0,.28);
+}
+
+/* Rodapé realmente no fundo em todas as abas */
+html { min-height: 100%; }
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.app-shell {
+  flex: 1 0 auto !important;
+}
+.site-footer {
+  margin-top: auto !important;
+}
+
 @media (max-width: 700px) {
+  body {
+    min-height: 100dvh;
+    padding-bottom: 0 !important;
+  }
+  .app-shell {
+    flex: 1 0 auto !important;
+    margin-bottom: 22px !important;
+  }
+  .site-footer {
+    margin-top: auto !important;
+    margin-bottom: calc(78px + env(safe-area-inset-bottom)) !important;
+  }
   .account-photo-frame {
     width: 124px;
     height: 124px;
@@ -369,5 +476,16 @@ body {
     align-items: end;
     padding-bottom: 12px;
     font-size: .66rem;
+  }
+  .coach-public-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+  }
+  .coach-public-body p { text-align: center; }
+  .coach-admin-head {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
   }
 }
