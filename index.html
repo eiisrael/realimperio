@@ -12,6 +12,87 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .site-footer {
+      width: 100%;
+      margin-top: 20px;
+      border-top: 1px solid rgba(227,179,92,.22);
+      background: linear-gradient(180deg, rgba(9,7,7,.86), rgba(7,6,6,.98));
+      backdrop-filter: blur(14px);
+    }
+    .site-footer-inner {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 92px;
+      margin: 0 auto;
+      padding: 22px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .site-footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .site-footer-brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid rgba(227,179,92,.55);
+    }
+    .site-footer-copy strong {
+      display: block;
+      font-family: Oswald, sans-serif;
+      letter-spacing: .04em;
+      color: var(--cream);
+    }
+    .site-footer-copy span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.45;
+    }
+    .developer-credit {
+      color: var(--muted);
+      font-size: .8rem;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .developer-credit a {
+      color: var(--gold-2);
+      font-weight: 800;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: .2s ease;
+    }
+    .developer-credit a:hover,
+    .developer-credit a:focus-visible {
+      color: var(--white);
+      border-bottom-color: var(--gold);
+    }
+    @media (max-width: 720px) {
+      .site-footer {
+        margin-bottom: 72px;
+      }
+      .site-footer-inner {
+        min-height: auto;
+        padding: 20px 0 22px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .developer-credit {
+        width: 100%;
+        text-align: left;
+        white-space: normal;
+        padding-left: 54px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="page-bg" aria-hidden="true"></div>
@@ -50,6 +131,22 @@
     <section id="view-account" class="view"></section>
     <section id="view-admin" class="view"></section>
   </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="site-footer-brand">
+        <img src="assets/logo-real-imperio.svg" alt="Escudo Real Império FC" />
+        <div class="site-footer-copy">
+          <strong>REAL IMPÉRIO FC</strong>
+          <span>© 2026 Real Império FC. Todos os direitos reservados.</span>
+        </div>
+      </div>
+      <div class="developer-credit">
+        Desenvolvido por
+        <a href="https://www.facebook.com/profile.php?id=61589798115664" target="_blank" rel="noopener noreferrer" aria-label="Facebook do desenvolvedor Erick Israel">Erick Israel</a>
+      </div>
+    </div>
+  </footer>
 
   <nav class="mobile-nav" aria-label="Navegação móvel">
     <button class="mobile-nav-item active" data-nav="home"><span>⌂</span><small>Início</small></button>
