@@ -76,20 +76,11 @@ create table public.news (
   updated_at timestamptz not null default now()
 );
 
-create table public.gallery (
-  id uuid primary key default gen_random_uuid(),
-  image_url text not null,
-  caption text,
-  published_on date not null default current_date,
-  created_at timestamptz not null default now()
-);
-
 alter table public.profiles enable row level security;
 alter table public.players enable row level security;
 alter table public.team_info enable row level security;
 alter table public.events enable row level security;
 alter table public.news enable row level security;
-alter table public.gallery enable row level security;
 
 create or replace function public.is_admin()
 returns boolean
@@ -109,9 +100,8 @@ create policy "public read approved players" on public.players for select using 
 create policy "public read team info" on public.team_info for select using (true);
 create policy "public read events" on public.events for select using (true);
 create policy "public read news" on public.news for select using (true);
-create policy "public read gallery" on public.gallery for select using (true);
 
--- Cadastro do jogador.
+-- Cadastro/perfil do jogador.
 -- Na implementação final, goals, lineup_slot, lineup_x, lineup_y e status devem ser alterados somente pela administração.
 create policy "player insert own application" on public.players for insert with check (user_id = auth.uid());
 create policy "player update own application" on public.players for update using (user_id = auth.uid()) with check (user_id = auth.uid());
@@ -121,12 +111,10 @@ create policy "admin manage players" on public.players for all using (public.is_
 create policy "admin manage team" on public.team_info for all using (public.is_admin()) with check (public.is_admin());
 create policy "admin manage events" on public.events for all using (public.is_admin()) with check (public.is_admin());
 create policy "admin manage news" on public.news for all using (public.is_admin()) with check (public.is_admin());
-create policy "admin manage gallery" on public.gallery for all using (public.is_admin()) with check (public.is_admin());
 
 -- Profiles: cada usuário lê o próprio; admins podem ler todos.
 create policy "profile self read" on public.profiles for select using (id = auth.uid() or public.is_admin());
 create policy "profile self update" on public.profiles for update using (id = auth.uid()) with check (id = auth.uid());
 
 -- Storage sugerido para próxima etapa:
--- bucket público: team-gallery
 -- bucket público: player-photos
