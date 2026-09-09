@@ -43,15 +43,15 @@ function avatarHtml(player){
 }
 
 function tooltipHtml(pos,player){
-  if(!player)return `<span class="lineup-tooltip"><strong>Posição disponível</strong><span class="position">${escapeHtml(pos.label)}</span><p class="lineup-tooltip-bio">A administração ainda não definiu um atleta para esta posição.</p></span>`;
+  if(!player)return `<div class="lineup-tooltip"><strong>Posição disponível</strong><span class="position">${escapeHtml(pos.label)}</span><p class="lineup-tooltip-bio">A administração ainda não definiu um atleta para esta posição.</p></div>`;
   const src=safeImageSrc(player.photo||''),g=goals(player);
-  return `<span class="lineup-tooltip"><span class="lineup-tooltip-head"><span class="lineup-tooltip-avatar">${src?`<img src="${escapeHtml(src)}" alt="">`:`${escapeHtml(initials(player.name))}`}</span><span><strong>${escapeHtml(player.name)}</strong><span class="position">${escapeHtml(pos.label)}</span></span></span><span class="lineup-tooltip-grid"><span class="lineup-tooltip-stat"><span>Camisa</span><strong>${escapeHtml(player.number||'—')}</strong></span><span class="lineup-tooltip-stat"><span>Gols</span><strong>⚽ ${g}</strong></span><span class="lineup-tooltip-stat"><span>Posição</span><strong>${escapeHtml(player.position||'Jogador')}</strong></span><span class="lineup-tooltip-stat"><span>Status</span><strong>Titular</strong></span></span><p class="lineup-tooltip-bio">${escapeHtml(player.bio||'Descrição do jogador ainda não adicionada.')}</p></span>`;
+  return `<div class="lineup-tooltip"><div class="lineup-tooltip-head"><div class="lineup-tooltip-avatar">${src?`<img src="${escapeHtml(src)}" alt="">`:`${escapeHtml(initials(player.name))}`}</div><div><strong>${escapeHtml(player.name)}</strong><span class="position">${escapeHtml(pos.label)}</span></div></div><div class="lineup-tooltip-grid"><div class="lineup-tooltip-stat"><span>Camisa</span><strong>${escapeHtml(player.number||'—')}</strong></div><div class="lineup-tooltip-stat"><span>Gols</span><strong>⚽ ${g}</strong></div><div class="lineup-tooltip-stat"><span>Posição</span><strong>${escapeHtml(player.position||'Jogador')}</strong></div><div class="lineup-tooltip-stat"><span>Status</span><strong>Titular</strong></div></div><p class="lineup-tooltip-bio">${escapeHtml(player.bio||'Descrição do jogador ainda não adicionada.')}</p></div>`;
 }
 
 function nodeHtml(pos,{admin=false}={}){
   const player=assignedPlayer(pos.slot),name=player?player.name.split(/\s+/)[0]:pos.short;
   const button=`<button type="button" class="lineup-player ${player?'':'is-empty'}" ${admin?`data-action="lineup-assign-slot" data-slot="${pos.slot}"`:''} aria-label="${escapeHtml(player?`${player.name} — ${pos.label}`:`${pos.label} — posição disponível`)}">${player?avatarHtml(player):`<span class="lineup-empty-abbr">${escapeHtml(pos.short)}</span>`}</button>`;
-  return `<span class="lineup-player-node ${admin?'lineup-admin-node':''}" style="--x:${pos.x}%;--y:${pos.y}%">${button}${tooltipHtml(pos,player)}<span class="lineup-name">${escapeHtml(name)}</span>${admin&&player?`<button type="button" class="lineup-clear-node" data-action="lineup-clear-slot" data-slot="${pos.slot}" aria-label="Retirar ${escapeHtml(player.name)} desta posição">×</button>`:''}</span>`;
+  return `<div class="lineup-player-node ${admin?'lineup-admin-node':''}" style="--x:${pos.x}%;--y:${pos.y}%">${button}${tooltipHtml(pos,player)}<span class="lineup-name">${escapeHtml(name)}</span>${admin&&player?`<button type="button" class="lineup-clear-node" data-action="lineup-clear-slot" data-slot="${pos.slot}" aria-label="Retirar ${escapeHtml(player.name)} desta posição">×</button>`:''}</div>`;
 }
 
 function pitchHtml({admin=false}={}){
