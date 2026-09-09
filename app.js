@@ -51,10 +51,9 @@ async function savePlayerAccount(form){
     p.passwordHash=await sha256(newPassword);
   }
 
-  const file=f.get('photoFile'),photoUrl=String(f.get('photoUrl')||'').trim();
+  const file=f.get('photoFile');
   if(f.get('removePhoto'))p.photo='';
   else if(file?.size)p.photo=await compressImage(file,1000,.82);
-  else if(photoUrl)p.photo=photoUrl;
 
   Object.assign(p,{
     name,
@@ -113,6 +112,26 @@ function remove(kind,id){
 
 document.addEventListener('change',e=>{
   if(e.target.id==='lineup-player-select')state.lineupSelectedPlayerId=e.target.value;
+
+  if(e.target.id==='player-photo-file'){
+    const file=e.target.files?.[0];
+    if(!file)return;
+    const frame=document.querySelector('.account-photo-frame');
+    if(!frame)return;
+    const url=URL.createObjectURL(file);
+    let photo=frame.querySelector('.account-profile-photo');
+    if(photo?.tagName==='IMG'){
+      photo.src=url;
+    }else{
+      const img=document.createElement('img');
+      img.className='account-profile-photo';
+      img.src=url;
+      img.alt='Prévia da nova foto';
+      photo?.replaceWith(img);
+    }
+    const removePhoto=document.querySelector('input[name="removePhoto"]');
+    if(removePhoto)removePhoto.checked=false;
+  }
 });
 
 document.addEventListener('click',e=>{
