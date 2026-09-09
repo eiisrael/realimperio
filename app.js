@@ -91,6 +91,10 @@ document.addEventListener('click',e=>{
   if(!isAdmin())return;
 
   if(act==='lineup-assign-slot'){
+    if(a.dataset.dragged==='1'){
+      delete a.dataset.dragged;
+      return;
+    }
     const selected=state.lineupSelectedPlayerId||$('#lineup-player-select')?.value||'';
     const result=assignLineupPlayer(a.dataset.slot,selected);
     if(!result.ok){toast(result.message,'error');return}
