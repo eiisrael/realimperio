@@ -62,10 +62,102 @@ function replaceReservaOptions(root=document){
   });
 }
 
+function formatWhatsapp(value=''){
+  const digits=String(value).replace(/\D/g,'').slice(0,11);
+  if(!digits)return '';
+  if(digits.length===1)return `(${digits}`;
+  if(digits.length===2)return `(${digits})`;
+  const ddd=digits.slice(0,2);
+  const number=digits.slice(2);
+  if(number.length<=5)return `(${ddd})${number}`;
+  return `(${ddd})${number.slice(0,5)}-${number.slice(5,9)}`;
+}
+
+function whatsappInputs(root=document){
+  const found=[];
+  if(root instanceof HTMLInputElement&&root.name==='whatsapp')found.push(root);
+  if(root?.querySelectorAll)found.push(...root.querySelectorAll('input[name="whatsapp"]'));
+  return [...new Set(found)];
+}
+
+function setupWhatsappMasks(root=document){
+  whatsappInputs(root).forEach(input=>{
+    input.inputMode='tel';
+    input.maxLength=14;
+    input.autocomplete='tel';
+    input.placeholder='(81)99876-5432';
+    input.value=formatWhatsapp(input.value);
+  });
+}
+
+function handleWhatsappInput(event){
+  const input=event.target;
+  if(!(input instanceof HTMLInputElement)||input.name!=='whatsapp')return;
+  input.value=formatWhatsapp(input.value);
+}
+
+function enforceRegistrationRules(root=document){
+  let form=null;
+  if(root instanceof HTMLFormElement&&root.id==='register-form')form=root;
+  else if(root?.querySelector)form=root.querySelector('#register-form');
+  if(!form)form=document.querySelector('#register-form');
+  if(!form)return;
+
+  const requiredNames=new Set(['name','email','password']);
+  form.querySelectorAll('input,select,textarea').forEach(field=>{
+    field.required=requiredNames.has(field.name);
+  });
+
+  const help=form.querySelector('.form-help');
+  if(help)help.textContent='Após o envio, seu cadastro ficará pendente até a decisão de um administrador.';
+}
+
+function setupCoachPhotoPicker(root=document){
+  let form=null;
+  if(root instanceof HTMLFormElement&&root.id==='coach-form')form=root;
+  else if(root?.querySelector)form=root.querySelector('#coach-form');
+  if(!form)form=document.querySelector('#coach-form');
+  if(!form)return;
+
+  const card=form.closest('.coach-admin-card');
+  const avatar=card?.querySelector('.coach-admin-avatar');
+  const input=form.querySelector('input[name="photoFile"][type="file"]');
+  if(!avatar||!input)return;
+
+  input.id='coach-photo-file';
+  const field=input.closest('.field');
+  if(field)field.classList.add('coach-photo-input-hidden');
+
+  avatar.classList.add('coach-photo-picker');
+  avatar.setAttribute('role','button');
+  avatar.setAttribute('tabindex','0');
+  avatar.setAttribute('aria-label','Alterar foto do Técnico');
+  avatar.setAttribute('title','Clique para alterar a foto');
+
+  let overlay=avatar.querySelector('.coach-photo-overlay');
+  if(!overlay){
+    overlay=document.createElement('span');
+    overlay.className='coach-photo-overlay';
+    overlay.textContent='Alterar foto';
+    avatar.appendChild(overlay);
+  }
+
+  avatar.onclick=()=>input.click();
+  avatar.onkeydown=e=>{
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      input.click();
+    }
+  };
+}
+
 function cleanupUi(root=document){
   removeImageUrlFields(root);
   removeFoundation(root);
   replaceReservaOptions(root);
+  setupWhatsappMasks(root);
+  enforceRegistrationRules(root);
+  setupCoachPhotoPicker(root);
 }
 
 function imageToCanvasFile(file){
@@ -247,7 +339,10 @@ function previewEditedImage(input,file){
 
   if(form?.id==='coach-form'){
     const avatar=$('.coach-admin-avatar');
-    if(avatar)avatar.innerHTML=`<img src="${url}" alt="Prévia da foto do Técnico">`;
+    if(avatar){
+      avatar.innerHTML=`<img src="${url}" alt="Prévia da foto do Técnico">`;
+      setupCoachPhotoPicker(document);
+    }
     const remove=$('input[name="removePhoto"]',form);
     if(remove)remove.checked=false;
   }
@@ -284,6 +379,7 @@ async function handleImageSelection(event){
 migrateLegacyPositions();
 cleanupUi();
 
+document.addEventListener('input',handleWhatsappInput,true);
 document.addEventListener('change',handleImageSelection,true);
 
 const observer=new MutationObserver(records=>{
