@@ -150,7 +150,7 @@ export const uid=(p='id')=>`${p}_${crypto.randomUUID?crypto.randomUUID():Date.no
 export async function sha256(v){const b=new TextEncoder().encode(String(v).trim().toLowerCase());const d=await crypto.subtle.digest('SHA-256',b);return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 export function getLocalAdmins(){try{return JSON.parse(localStorage.getItem(ADMIN_CONFIG_KEY))||[]}catch{return[]}}
 export function setLocalAdmins(admins){localStorage.setItem(ADMIN_CONFIG_KEY,JSON.stringify(admins))}
-export const escapeHtml=(v='')=>String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt',"'":'&#39;','"':'&quot;'}[c]));
+export const escapeHtml=(v='')=>String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 export function safeImageSrc(v=''){const s=String(v).trim();return /^assets\//i.test(s)||/^https?:\/\//i.test(s)||/^data:image\/(png|jpe?g|webp|gif);base64,/i.test(s)?s:''}
 export function parseDate(s){return s?new Date(`${s}T12:00:00`):null}
 export function formatDate(s,o={}){const d=parseDate(s);return !d||Number.isNaN(d.getTime())?'Data a confirmar':new Intl.DateTimeFormat('pt-BR',o).format(d)}
