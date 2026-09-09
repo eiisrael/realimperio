@@ -352,6 +352,10 @@ async function handleImageSelection(event){
   const input=event.target;
   if(!(input instanceof HTMLInputElement))return;
   if(input.type!=='file'||!String(input.accept||'').includes('image'))return;
+
+  // Imagens de notícia devem usar o arquivo original, sem zoom/enquadramento.
+  if(input.closest('form')?.id==='news-form')return;
+
   if(input.dataset.riCropReady==='1'){
     delete input.dataset.riCropReady;
     return;
