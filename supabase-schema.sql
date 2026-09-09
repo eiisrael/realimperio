@@ -25,6 +25,11 @@ create table public.players (
   position text,
   shirt_number text,
   goals integer not null default 0 check (goals >= 0),
+  lineup_slot text unique check (
+    lineup_slot is null or lineup_slot in (
+      'lw','st','rw','lcm','cm','rcm','lb','lcb','rcb','rb','gk'
+    )
+  ),
   bio text,
   photo_url text,
   status public.player_status not null default 'pending',
@@ -41,6 +46,7 @@ create table public.team_info (
   founded text,
   general_admin_email text,
   description text,
+  lineup_formation text not null default '4-3-3',
   updated_at timestamptz not null default now()
 );
 
@@ -101,8 +107,8 @@ create policy "public read events" on public.events for select using (true);
 create policy "public read news" on public.news for select using (true);
 create policy "public read gallery" on public.gallery for select using (true);
 
--- Jogador pode consultar/atualizar o próprio perfil de cadastro.
--- Na implementação final, o saldo de gols deve ser atualizado somente pela administração.
+-- Cadastro do jogador.
+-- Na implementação final, goals, lineup_slot e status devem ser alterados somente pela administração.
 create policy "player insert own application" on public.players for insert with check (user_id = auth.uid());
 create policy "player update own application" on public.players for update using (user_id = auth.uid()) with check (user_id = auth.uid());
 
