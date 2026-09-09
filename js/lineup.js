@@ -43,15 +43,15 @@ function avatarHtml(player){
 }
 
 function tooltipHtml(pos,player){
-  if(!player)return `<div class="lineup-tooltip"><strong>Posição disponível</strong><span class="position">${escapeHtml(pos.label)}</span><p class="lineup-tooltip-bio">A administração ainda não definiu um atleta para esta posição.</p></div>`;
+  if(!player)return `<span class="lineup-tooltip"><strong>Posição disponível</strong><span class="position">${escapeHtml(pos.label)}</span><p class="lineup-tooltip-bio">A administração ainda não definiu um atleta para esta posição.</p></span>`;
   const src=safeImageSrc(player.photo||''),g=goals(player);
-  return `<div class="lineup-tooltip"><div class="lineup-tooltip-head"><div class="lineup-tooltip-avatar">${src?`<img src="${escapeHtml(src)}" alt="">`:`${escapeHtml(initials(player.name))}`}</div><div><strong>${escapeHtml(player.name)}</strong><span class="position">${escapeHtml(pos.label)}</span></div></div><div class="lineup-tooltip-grid"><div class="lineup-tooltip-stat"><span>Camisa</span><strong>${escapeHtml(player.number||'—')}</strong></div><div class="lineup-tooltip-stat"><span>Gols</span><strong>⚽ ${g}</strong></div><div class="lineup-tooltip-stat"><span>Posição</span><strong>${escapeHtml(player.position||'Jogador')}</strong></div><div class="lineup-tooltip-stat"><span>Status</span><strong>Titular</strong></div></div><p class="lineup-tooltip-bio">${escapeHtml(player.bio||'Descrição do jogador ainda não adicionada.')}</p></div>`;
+  return `<span class="lineup-tooltip"><span class="lineup-tooltip-head"><span class="lineup-tooltip-avatar">${src?`<img src="${escapeHtml(src)}" alt="">`:`${escapeHtml(initials(player.name))}`}</span><span><strong>${escapeHtml(player.name)}</strong><span class="position">${escapeHtml(pos.label)}</span></span></span><span class="lineup-tooltip-grid"><span class="lineup-tooltip-stat"><span>Camisa</span><strong>${escapeHtml(player.number||'—')}</strong></span><span class="lineup-tooltip-stat"><span>Gols</span><strong>⚽ ${g}</strong></span><span class="lineup-tooltip-stat"><span>Posição</span><strong>${escapeHtml(player.position||'Jogador')}</strong></span><span class="lineup-tooltip-stat"><span>Status</span><strong>Titular</strong></span></span><p class="lineup-tooltip-bio">${escapeHtml(player.bio||'Descrição do jogador ainda não adicionada.')}</p></span>`;
 }
 
 function nodeHtml(pos,{admin=false}={}){
   const player=assignedPlayer(pos.slot),name=player?player.name.split(/\s+/)[0]:pos.short;
   const button=`<button type="button" class="lineup-player ${player?'':'is-empty'}" ${admin?`data-action="lineup-assign-slot" data-slot="${pos.slot}"`:''} aria-label="${escapeHtml(player?`${player.name} — ${pos.label}`:`${pos.label} — posição disponível`)}">${player?avatarHtml(player):`<span class="lineup-empty-abbr">${escapeHtml(pos.short)}</span>`}</button>`;
-  return `<div class="lineup-player-node ${admin?'lineup-admin-node':''}" style="--x:${pos.x}%;--y:${pos.y}%">${button}${tooltipHtml(pos,player)}<span class="lineup-name">${escapeHtml(name)}</span>${admin&&player?`<button type="button" class="lineup-clear-node" data-action="lineup-clear-slot" data-slot="${pos.slot}" aria-label="Retirar ${escapeHtml(player.name)} desta posição">×</button>`:''}</div>`;
+  return `<span class="lineup-player-node ${admin?'lineup-admin-node':''}" style="--x:${pos.x}%;--y:${pos.y}%">${button}${tooltipHtml(pos,player)}<span class="lineup-name">${escapeHtml(name)}</span>${admin&&player?`<button type="button" class="lineup-clear-node" data-action="lineup-clear-slot" data-slot="${pos.slot}" aria-label="Retirar ${escapeHtml(player.name)} desta posição">×</button>`:''}</span>`;
 }
 
 function pitchHtml({admin=false}={}){
@@ -61,15 +61,13 @@ function pitchHtml({admin=false}={}){
 export function publicLineupHtml(){
   ensureLineup();
   const count=LINEUP_POSITIONS.filter(p=>assignedPlayer(p.slot)).length;
-  return `<section class="section lineup-section" id="home-lineup"><div class="section-title"><div><div class="lineup-title-row"><h2>Escalação</h2><span class="lineup-formation-chip">⚽ Formação ${escapeHtml(state.data.lineup.formation)}</span></div><p>Passe o mouse sobre um atleta — ou toque no celular — para ver nome, posição, camisa, gols e informações.</p></div></div><div class="lineup-shell"><div class="lineup-topbar"><div><strong>REAL IMPÉRIO FC · TITULARES</strong><span>${count}/11 posições definidas pela administração</span></div><span>Indianópolis · Caruaru-PE</span></div>${pitchHtml()}</div></section>`;
+  return `<div class="page-head lineup-page-head"><div><span class="kicker">Time titular</span><h1>Escalação</h1><p>Conheça a formação titular do Real Império FC. Passe o mouse sobre um atleta — ou toque no celular — para ver nome, posição, camisa, saldo de gols e informações.</p></div><span class="lineup-formation-chip">⚽ Formação ${escapeHtml(state.data.lineup.formation)}</span></div><section class="lineup-section" id="public-lineup"><div class="lineup-shell"><div class="lineup-topbar"><div><strong>REAL IMPÉRIO FC · TITULARES</strong><span>${count}/11 posições definidas pela administração</span></div><span>Indianópolis · Caruaru-PE</span></div>${pitchHtml()}</div></section>`;
 }
 
 export function renderLineupPublic(){
-  const home=document.querySelector('#view-home');
-  if(!home)return;
-  home.querySelector('#home-lineup')?.remove();
-  const stats=home.querySelector('.stats');
-  if(stats)stats.insertAdjacentHTML('afterend',publicLineupHtml());
+  const view=document.querySelector('#view-lineup');
+  if(!view)return;
+  view.innerHTML=publicLineupHtml();
 }
 
 export function renderLineupAdmin(){
