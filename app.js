@@ -1,6 +1,6 @@
-import {state,saveData,saveSession,isAdmin,sha256,getLocalAdmins,uid,logAction} from './js/state.js';
+import {state,saveData,saveSession,isAdmin,currentPlayer,sha256,getLocalAdmins,uid,logAction,escapeHtml,formatDate} from './js/state.js';
 import {renderPublic,showView} from './js/render.js';
-import {renderAdmin,modalHtml,saveAdminForm} from './js/admin.js';
+import {renderAdmin,modalHtml,saveAdminForm,compressImage} from './js/admin.js';
 import {renderLineupPublic,renderLineupAdmin,assignLineupPlayer,clearLineupSlot,clearLineupAll,removePlayerFromLineup} from './js/lineup.js';
 
 const $=s=>document.querySelector(s);
@@ -37,6 +37,41 @@ async function register(form){
   toast('Solicitação enviada para aprovação.','success');
 }
 
+async function savePlayerAccount(form){
+  const p=currentPlayer();
+  if(!p)throw new Error('Sessão de jogador não encontrada.');
+  const f=new FormData(form),email=String(f.get('email')).trim().toLowerCase(),name=String(f.get('name')).trim();
+  if(!name)throw new Error('Informe seu nome.');
+  if(state.data.players.some(x=>x.id!==p.id&&x.email.toLowerCase()===email))throw new Error('Este e-mail já está em uso.');
+
+  const newPassword=String(f.get('newPassword')||''),confirmPassword=String(f.get('confirmPassword')||'');
+  if(newPassword||confirmPassword){
+    if(newPassword.length<6)throw new Error('A nova senha precisa ter pelo menos 6 caracteres.');
+    if(newPassword!==confirmPassword)throw new Error('A confirmação da nova senha não confere.');
+    p.passwordHash=await sha256(newPassword);
+  }
+
+  const file=f.get('photoFile'),photoUrl=String(f.get('photoUrl')||'').trim();
+  if(f.get('removePhoto'))p.photo='';
+  else if(file?.size)p.photo=await compressImage(file,1000,.82);
+  else if(photoUrl)p.photo=photoUrl;
+
+  Object.assign(p,{
+    name,
+    email,
+    number:String(f.get('number')||'').trim(),
+    position:String(f.get('position')||'').trim(),
+    whatsapp:String(f.get('whatsapp')||'').trim(),
+    bio:String(f.get('bio')||'').trim()
+  });
+  logAction(`Jogador atualizou o próprio perfil: ${p.name}`);
+  saveData();
+  saveSession({...state.session,name:p.name});
+  refresh();
+  showView('account',false);
+  toast('Configurações salvas.','success');
+}
+
 async function login(form){
   const f=new FormData(form),email=String(f.get('email')).trim().toLowerCase(),pass=String(f.get('password')),eh=await sha256(email),ph=await sha256(pass),admin=getLocalAdmins().find(a=>a.emailHash===eh&&a.passwordHash===ph);
   if(admin){
@@ -54,8 +89,16 @@ async function login(form){
   toast('Login realizado.','success');
 }
 
+function openNews(id){
+  const n=state.data.news.find(x=>x.id===id);
+  if(!n)return;
+  openModal(`<article class="news-modal"><span class="kicker">Notícia do Real Império FC</span><h2>${escapeHtml(n.title)}</h2><time>${formatDate(n.date,{day:'2-digit',month:'long',year:'numeric'})}</time><div class="news-modal-body">${escapeHtml(n.body).replace(/\n/g,'<br>')}</div></article>`);
+}
+
 function remove(kind,id){
-  const key={player:'players',event:'events',news:'news',gallery:'gallery'}[kind],item=state.data[key].find(x=>x.id===id);
+  const key={player:'players',event:'events',news:'news'}[kind];
+  if(!key)return;
+  const item=state.data[key].find(x=>x.id===id);
   openModal(`<h2>Confirmar exclusão</h2><p class="team-story">Deseja excluir este registro?</p><div class="form-actions"><button class="btn btn-dark" data-action="close-modal">Cancelar</button><button class="btn btn-danger" id="yes-delete">Excluir</button></div>`);
   $('#yes-delete').onclick=()=>{
     if(kind==='player')removePlayerFromLineup(id);
@@ -87,6 +130,7 @@ document.addEventListener('click',e=>{
   const act=a.dataset.action,id=a.dataset.id;
 
   if(act==='close-modal')return closeModal();
+  if(act==='open-news'){openNews(id);return}
   if(act==='logout'){saveSession(null);state.adminTab='dashboard';refresh();showView('home');return}
   if(!isAdmin())return;
 
@@ -143,7 +187,7 @@ document.addEventListener('click',e=>{
 
   if(act.startsWith('new-')){openModal(modalHtml(act.slice(4)));return}
   if(act.startsWith('edit-')){
-    const k=act.slice(5),map={player:'players',event:'events',news:'news',gallery:'gallery'},item=state.data[map[k]]?.find(x=>x.id===id);
+    const k=act.slice(5),map={player:'players',event:'events',news:'news'},item=state.data[map[k]]?.find(x=>x.id===id);
     if(item)openModal(modalHtml(k,item));
     return;
   }
@@ -155,6 +199,7 @@ document.addEventListener('submit',async e=>{
   try{
     if(e.target.id==='register-form')await register(e.target);
     else if(e.target.id==='login-form')await login(e.target);
+    else if(e.target.id==='player-account-form')await savePlayerAccount(e.target);
     else{
       await saveAdminForm(e.target);
       closeModal();
@@ -173,5 +218,5 @@ $('#modal-close').onclick=closeModal;
 $('#modal').onclick=e=>{if(e.target===$('#modal'))closeModal()};
 
 const h=location.hash.slice(1);
-if(['home','agenda','team','lineup','players','extras','register','account','admin'].includes(h))state.currentView=h;
+if(['home','agenda','team','lineup','players','register','account','admin'].includes(h))state.currentView=h;
 refresh();
