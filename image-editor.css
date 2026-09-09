@@ -104,6 +104,39 @@
   gap:10px;
   margin-top:20px;
 }
+
+.coach-photo-input-hidden{display:none!important}
+.coach-photo-picker{
+  position:relative;
+  cursor:pointer;
+  outline:none;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.coach-photo-picker:hover,
+.coach-photo-picker:focus-visible{
+  transform:translateY(-2px);
+  box-shadow:0 0 0 5px rgba(227,179,92,.12),0 16px 34px rgba(0,0,0,.3);
+}
+.coach-photo-overlay{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  padding:12px;
+  border-radius:50%;
+  background:linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.78));
+  color:#fff;
+  font-size:.68rem;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  opacity:0;
+  transition:opacity .18s ease;
+  pointer-events:none;
+}
+.coach-photo-picker:hover .coach-photo-overlay,
+.coach-photo-picker:focus-visible .coach-photo-overlay{opacity:1}
+
 @media(max-width:700px){
   .ri-crop-overlay{padding:10px}
   .ri-crop-card{padding:16px;border-radius:18px;max-height:calc(100dvh - 20px)}
@@ -112,6 +145,13 @@
   .ri-crop-stage{width:min(78vw,390px);border-radius:18px}
   .ri-crop-actions{display:grid;grid-template-columns:1fr 1fr}
   .ri-crop-actions .btn{width:100%;padding-inline:10px}
+  .coach-photo-overlay{
+    opacity:1;
+    align-items:end;
+    padding-bottom:11px;
+    background:linear-gradient(180deg,transparent 52%,rgba(0,0,0,.8));
+    font-size:.62rem;
+  }
 }
 @media(max-width:420px){
   .ri-crop-stage{width:min(82vw,340px)}
