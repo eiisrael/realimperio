@@ -5,40 +5,44 @@ Aplicativo web responsivo do **Real Império FC**, de Indianópolis, Caruaru-PE.
 ## O que já funciona localmente
 
 - Página inicial com identidade visual do time.
+- Resumo do elenco e próximos eventos posicionado acima do destaque principal.
+- Notícias e próximos compromissos lado a lado na página inicial.
+- Notícias clicáveis, abertas em uma janela modal com botão de fechar.
 - Agenda pública de jogos e treinos.
 - Informações do clube.
 - Elenco público com foto, posição, número, descrição e saldo de gols.
-- Aba pública **Escalação**:
-  - mini campo profissional;
-  - foto ou iniciais do atleta dentro da posição;
-  - informações do jogador ao passar o mouse ou tocar no celular;
-  - nome, posição, camisa, saldo de gols e descrição;
-  - contador de posições titulares preenchidas;
-  - exibição da formação definida pela administração.
-- Galeria **Extras** com fotos recentes.
-- Notícias do time.
-- Cadastro de jogador com nome, e-mail e senha.
-- Solicitações de cadastro com fluxo de **aceitar / negar**.
+- Aba pública **Escalação** com mini campo profissional, informações do atleta e formação definida pela administração.
+- Cadastro de jogador com aprovação ou recusa pela administração.
 - Login de administrador e de jogador.
-- Painel administrativo responsivo com CRUD de:
-  - jogadores;
+- Área **Minha Conta** do jogador com edição de:
+  - foto;
+  - nome;
+  - e-mail;
+  - número da camisa;
+  - posição;
+  - WhatsApp;
+  - descrição;
+  - senha.
+- O saldo de gols e o status continuam controlados pela administração.
+- Painel administrativo responsivo com gestão de:
+  - jogadores, incluindo foto, dados, gols e senha;
   - jogos e treinos;
   - notícias;
-  - fotos da galeria;
   - informações do time.
 - Editor visual da **Escalação** no painel administrativo:
-  - escolha entre diversas formações clássicas e modernas (4-3-3, 4-4-2, 4-2-3-1, 3-5-2, 5-3-2 e várias outras);
-  - modo **Livre / Personalizada** para criar qualquer variação;
+  - escolha entre diversas formações clássicas e modernas;
+  - modo **Livre / Personalizada**;
   - seleção de jogador e clique na posição para escalar ou substituir;
-  - **arrastar e soltar** jogadores para qualquer ponto do campo;
-  - botão para restaurar as posições originais da formação selecionada;
+  - arrastar e soltar jogadores para qualquer ponto do campo;
+  - restauração das posições originais da formação;
   - remoção individual ou limpeza completa da escalação.
+- Área **Extras** removida da navegação pública e do painel administrativo.
+- Interface sem emojis para manter aparência mais profissional.
+- Rodapé mantido no fim da página, inclusive em telas com pouco conteúdo.
 - Dados persistidos no navegador com `localStorage` durante a fase local.
 - Sessão mantida somente na aba/janela atual com `sessionStorage`.
 
 ## Rodar localmente
-
-Por segurança e compatibilidade com APIs do navegador, abra por um servidor HTTP local em vez de clicar diretamente no `index.html`.
 
 ### Python
 
@@ -65,11 +69,11 @@ As credenciais não ficam gravadas em texto puro no `localStorage`. O protótipo
 
 ## Preparação para Vercel + Supabase
 
-A interface é estática e já pode ser hospedada na Vercel. Para a próxima etapa, o arquivo `supabase-schema.sql` contém uma base de tabelas e políticas para migrarmos o armazenamento local para:
+A interface é estática e já pode ser hospedada na Vercel. O arquivo `supabase-schema.sql` contém a base para migrarmos para:
 
-- Supabase Auth para login;
-- PostgreSQL para jogadores, saldo de gols, escalação, posições livres, agenda, notícias e dados do time;
-- Supabase Storage para fotos;
+- Supabase Auth para login e alteração segura de senha;
+- PostgreSQL para jogadores, saldo de gols, escalação, agenda, notícias e dados do time;
+- Supabase Storage para fotos dos jogadores;
 - Row Level Security (RLS) para separar acesso público, jogador e administrador.
 
 ## Estrutura
@@ -86,13 +90,11 @@ realimperio/
 ├─ app.js
 ├─ index.html
 ├─ lineup.css
+├─ professional.css
+├─ professional.js
 ├─ manifest.json
 ├─ setup-local.html
 ├─ styles.css
 ├─ supabase-schema.sql
 └─ vercel.json
 ```
-
-## Observação sobre fotos no modo local
-
-Imagens enviadas pelo painel são comprimidas no navegador e salvas em `localStorage`. Navegadores possuem limite de armazenamento; para muitas fotos, use URLs durante o protótipo. Na versão Supabase, as imagens serão armazenadas no Storage.
