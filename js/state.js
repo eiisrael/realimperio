@@ -46,7 +46,22 @@ export function loadData(){
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if(!saved) return clone(DEFAULT_DATA);
-    const savedLineup=saved.lineup||{};
+    const savedLineup=saved.lineup||{},legacy=savedLineup.slots||{};
+    const slots={
+      ...clone(DEFAULT_LINEUP.slots),
+      ...legacy,
+      p1:legacy.p1??legacy.lw??null,
+      p2:legacy.p2??legacy.st??null,
+      p3:legacy.p3??legacy.rw??null,
+      p4:legacy.p4??legacy.lcm??null,
+      p5:legacy.p5??legacy.cm??null,
+      p6:legacy.p6??legacy.rcm??null,
+      p7:legacy.p7??legacy.lb??null,
+      p8:legacy.p8??legacy.lcb??null,
+      p9:legacy.p9??legacy.rcb??null,
+      p10:legacy.p10??legacy.rb??null,
+      gk:legacy.gk??null
+    };
     return {
       ...clone(DEFAULT_DATA),
       ...saved,
@@ -57,7 +72,7 @@ export function loadData(){
       lineup:{
         ...clone(DEFAULT_LINEUP),
         ...savedLineup,
-        slots:{...clone(DEFAULT_LINEUP.slots), ...(savedLineup.slots||{})},
+        slots,
         coordinates:{...(savedLineup.coordinates||{})}
       },
       gallery:Array.isArray(saved.gallery)?saved.gallery:clone(DEFAULT_DATA.gallery),
