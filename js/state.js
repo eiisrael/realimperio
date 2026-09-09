@@ -14,21 +14,30 @@ const DEFAULT_LINEUP = {
   coordinates: {}
 };
 
+const DEFAULT_COACH = {
+  name: '',
+  photo: '',
+  whatsapp: '',
+  bio: '',
+  role: 'Técnico'
+};
+
 export const DEFAULT_DATA = {
   team: {
     name: 'Real Império FC', neighborhood: 'Indianópolis', city: 'Caruaru-PE',
     generalAdmin: 'italorodrigo550@gmail.com', founded: '', trainingPlace: 'Indianópolis, Caruaru-PE',
     description: 'O Real Império FC representa a paixão pelo futebol em Indianópolis, Caruaru-PE. Este espaço reúne a agenda do time, notícias, elenco e registros dos momentos vividos dentro e fora de campo.'
   },
+  coach: DEFAULT_COACH,
   events: [
     { id:'evt_1', type:'training', title:'Treino do elenco', date:'2026-09-10', time:'19:30', place:'Indianópolis, Caruaru-PE', opponent:'', notes:'Chegar com antecedência para organização.' },
     { id:'evt_2', type:'game', title:'Próximo jogo', date:'2026-09-13', time:'09:00', place:'A confirmar', opponent:'Adversário a confirmar', notes:'Detalhes podem ser atualizados pelo administrador.' },
     { id:'evt_3', type:'training', title:'Treino técnico', date:'2026-09-17', time:'19:30', place:'Indianópolis, Caruaru-PE', opponent:'', notes:'' }
   ],
-  news: [{ id:'news_1', title:'Aplicativo do Real Império FC', body:'O novo espaço do Real Império FC já está em construção para reunir agenda, notícias, elenco e fotos do time em um só lugar.', date:'2026-09-08' }],
+  news: [{ id:'news_1', title:'Aplicativo do Real Império FC', body:'O novo espaço do Real Império FC já está em construção para reunir agenda, notícias e elenco do time em um só lugar.', date:'2026-09-08' }],
   players: [],
   lineup: DEFAULT_LINEUP,
-  gallery: [{ id:'gal_1', image:'assets/logo-real-imperio.svg', caption:'Escudo oficial do Real Império FC', date:'2026-09-08' }],
+  gallery: [],
   audit: []
 };
 
@@ -62,10 +71,17 @@ export function loadData(){
       p10:legacy.p10??legacy.rb??null,
       gk:legacy.gk??null
     };
+    const legacyAdminName=String(saved.team?.generalAdmin||'').trim();
+    const migratedCoach={
+      ...clone(DEFAULT_COACH),
+      ...(saved.coach||{})
+    };
+    if(!migratedCoach.name&&legacyAdminName&&!legacyAdminName.includes('@'))migratedCoach.name=legacyAdminName;
     return {
       ...clone(DEFAULT_DATA),
       ...saved,
       team:{...clone(DEFAULT_DATA.team), ...(saved.team||{})},
+      coach:migratedCoach,
       events:Array.isArray(saved.events)?saved.events:clone(DEFAULT_DATA.events),
       news:Array.isArray(saved.news)?saved.news:clone(DEFAULT_DATA.news),
       players:Array.isArray(saved.players)?saved.players.map(p=>({...p,goals:Math.max(0,Number.parseInt(p.goals,10)||0)})):[],
@@ -75,7 +91,7 @@ export function loadData(){
         slots,
         coordinates:{...(savedLineup.coordinates||{})}
       },
-      gallery:Array.isArray(saved.gallery)?saved.gallery:clone(DEFAULT_DATA.gallery),
+      gallery:[],
       audit:Array.isArray(saved.audit)?saved.audit:[]
     };
   } catch { return clone(DEFAULT_DATA); }
