@@ -107,6 +107,35 @@ body {
   font-size: .95rem;
   white-space: normal;
 }
+.news-modal-image {
+  display: block;
+  width: 100%;
+  max-height: 460px;
+  margin: 0 0 20px;
+  border-radius: 16px;
+  object-fit: cover;
+  border: 1px solid rgba(227,179,92,.18);
+  box-shadow: 0 14px 34px rgba(0,0,0,.25);
+}
+.news-admin-preview {
+  width: min(100%, 520px);
+  margin: 0 auto 18px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(227,179,92,.2);
+  background: #111;
+}
+.news-admin-preview img,
+.admin-news-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.admin-news-thumb {
+  margin: 0 0 14px;
+  border-radius: 12px;
+}
 
 /* Elenco sem emojis */
 .empty-mark {
@@ -488,4 +517,5 @@ body {
     text-align: center;
     justify-items: center;
   }
+  .news-modal-image { max-height: 320px; border-radius: 12px; }
 }
