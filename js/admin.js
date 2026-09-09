@@ -3,6 +3,14 @@ import {emptyState} from './render.js';
 
 const $=s=>document.querySelector(s);
 const goals=p=>Math.max(0,Number.parseInt(p?.goals,10)||0);
+const phone=value=>{
+  const d=String(value||'').replace(/\D/g,'').slice(0,11);
+  if(!d)return '—';
+  if(d.length<3)return d;
+  const ddd=d.slice(0,2),n=d.slice(2);
+  if(n.length<=5)return `(${ddd})${n}`;
+  return `(${ddd})${n.slice(0,5)}-${n.slice(5,9)}`;
+};
 
 function positionOptions(current=''){
   const normalized=current==='Outro'?'Reserva':current;
@@ -32,10 +40,10 @@ function tabHtml(){
 
   if(state.adminTab==='requests'){
     const a=d.players.filter(p=>p.status==='pending').sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
-    return `<div class="admin-toolbar"><div><h2>Solicitações pendentes</h2><p class="form-help">Aceite ou negue novos cadastros.</p></div></div><div class="grid">${a.length?a.map(p=>`<article class="card approval-card"><div><h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.email)}${p.position?' · '+escapeHtml(p.position==='Outro'?'Reserva':p.position):''} · ${goals(p)} gols</p></div><div class="approval-actions"><button class="btn btn-gold btn-sm" data-action="approve-player" data-id="${p.id}">Aceitar</button><button class="btn btn-danger btn-sm" data-action="reject-player" data-id="${p.id}">Negar</button></div></article>`).join(''):emptyState('Não há solicitações pendentes.')}</div>`;
+    return `<div class="admin-toolbar"><div><h2>Solicitações pendentes</h2><p class="form-help">Aceite ou negue novos cadastros.</p></div></div><div class="grid">${a.length?a.map(p=>`<article class="card approval-card"><div><h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.email)}${p.whatsapp?` · ${escapeHtml(phone(p.whatsapp))}`:''}${p.position?' · '+escapeHtml(p.position==='Outro'?'Reserva':p.position):''} · ${goals(p)} gols</p></div><div class="approval-actions"><button class="btn btn-gold btn-sm" data-action="approve-player" data-id="${p.id}">Aceitar</button><button class="btn btn-danger btn-sm" data-action="reject-player" data-id="${p.id}">Negar</button></div></article>`).join(''):emptyState('Não há solicitações pendentes.')}</div>`;
   }
 
-  if(state.adminTab==='players')return `<div class="admin-toolbar"><div><h2>Jogadores</h2><p class="form-help">Gerencie imagem, dados pessoais, número, posição, gols e senha de acesso.</p></div><button class="btn btn-gold btn-sm" data-action="new-player">+ Novo jogador</button></div>${d.players.length?`<div class="table-wrap"><table><thead><tr><th>Jogador</th><th>Status</th><th>Posição</th><th>Nº</th><th>Gols</th><th>E-mail</th><th>Ações</th></tr></thead><tbody>${[...d.players].sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<tr><td><strong>${escapeHtml(p.name)}</strong></td><td>${p.status}</td><td>${escapeHtml(p.position==='Outro'?'Reserva':p.position||'—')}</td><td>${escapeHtml(p.number||'—')}</td><td><strong>${goals(p)}</strong></td><td>${escapeHtml(p.email)}</td><td class="actions-cell"><button class="btn btn-dark btn-sm" data-action="edit-player" data-id="${p.id}">Editar</button><button class="btn btn-danger btn-sm" data-action="delete-player" data-id="${p.id}">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:emptyState('Nenhum jogador cadastrado.')}`;
+  if(state.adminTab==='players')return `<div class="admin-toolbar"><div><h2>Jogadores</h2><p class="form-help">Gerencie imagem, dados pessoais, número, posição, gols, WhatsApp e senha de acesso.</p></div><button class="btn btn-gold btn-sm" data-action="new-player">+ Novo jogador</button></div>${d.players.length?`<div class="table-wrap"><table><thead><tr><th>Jogador</th><th>Status</th><th>Posição</th><th>Nº</th><th>Gols</th><th>WhatsApp</th><th>E-mail</th><th>Ações</th></tr></thead><tbody>${[...d.players].sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<tr><td><strong>${escapeHtml(p.name)}</strong></td><td>${p.status}</td><td>${escapeHtml(p.position==='Outro'?'Reserva':p.position||'—')}</td><td>${escapeHtml(p.number||'—')}</td><td><strong>${goals(p)}</strong></td><td>${escapeHtml(phone(p.whatsapp))}</td><td>${escapeHtml(p.email)}</td><td class="actions-cell"><button class="btn btn-dark btn-sm" data-action="edit-player" data-id="${p.id}">Editar</button><button class="btn btn-danger btn-sm" data-action="delete-player" data-id="${p.id}">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:emptyState('Nenhum jogador cadastrado.')}`;
 
   if(state.adminTab==='events')return tableSection('Agenda','Marque jogos e treinos.','new-event','Novo evento',d.events,[['Tipo',e=>e.type==='game'?'Jogo':'Treino'],['Data',e=>formatDate(e.date,{day:'2-digit',month:'2-digit',year:'numeric'})],['Título',e=>e.title],['Horário',e=>e.time||'—'],['Local',e=>e.place||'—']], 'event');
 
