@@ -47,7 +47,7 @@ function tabHtml(){
 
   if(state.adminTab==='events')return tableSection('Agenda','Marque jogos e treinos.','new-event','Novo evento',d.events,[['Tipo',e=>e.type==='game'?'Jogo':'Treino'],['Data',e=>formatDate(e.date,{day:'2-digit',month:'2-digit',year:'numeric'})],['Título',e=>e.title],['Horário',e=>e.time||'—'],['Local',e=>e.place||'—']], 'event');
 
-  if(state.adminTab==='news')return `<div class="admin-toolbar"><div><h2>Notícias</h2><p class="form-help">Adicione e modifique notícias sobre o time.</p></div><button class="btn btn-gold btn-sm" data-action="new-news">+ Nova notícia</button></div><div class="grid">${d.news.length?[...d.news].sort((a,b)=>b.date.localeCompare(a.date)).map(n=>`<article class="card"><time class="form-help">${formatDate(n.date,{day:'2-digit',month:'long',year:'numeric'})}</time><h3>${escapeHtml(n.title)}</h3><p class="team-story">${escapeHtml(n.body)}</p><div class="form-actions"><button class="btn btn-dark btn-sm" data-action="edit-news" data-id="${n.id}">Editar</button><button class="btn btn-danger btn-sm" data-action="delete-news" data-id="${n.id}">Excluir</button></div></article>`).join(''):emptyState('Nenhuma notícia publicada.')}</div>`;
+  if(state.adminTab==='news')return `<div class="admin-toolbar"><div><h2>Notícias</h2><p class="form-help">Adicione e modifique notícias sobre o time.</p></div><button class="btn btn-gold btn-sm" data-action="new-news">+ Nova notícia</button></div><div class="grid">${d.news.length?[...d.news].sort((a,b)=>b.date.localeCompare(a.date)).map(n=>{const image=safeImageSrc(n.image||'');return `<article class="card">${image?`<img class="admin-news-thumb" src="${escapeHtml(image)}" alt="Imagem da notícia ${escapeHtml(n.title)}">`:''}<time class="form-help">${formatDate(n.date,{day:'2-digit',month:'long',year:'numeric'})}</time><h3>${escapeHtml(n.title)}</h3><p class="team-story">${escapeHtml(n.body)}</p><div class="form-actions"><button class="btn btn-dark btn-sm" data-action="edit-news" data-id="${n.id}">Editar</button><button class="btn btn-danger btn-sm" data-action="delete-news" data-id="${n.id}">Excluir</button></div></article>`}).join(''):emptyState('Nenhuma notícia publicada.')}</div>`;
 
   if(state.adminTab==='team')return `<article class="card"><h2>Informações do time</h2><form id="team-form"><div class="form-grid"><div class="field"><label>Nome</label><input name="name" value="${escapeHtml(d.team.name)}" required></div><div class="field"><label>Bairro</label><input name="neighborhood" value="${escapeHtml(d.team.neighborhood)}"></div><div class="field"><label>Cidade</label><input name="city" value="${escapeHtml(d.team.city)}"></div><div class="field full"><label>Local de treino</label><input name="trainingPlace" value="${escapeHtml(d.team.trainingPlace)}"></div><div class="field full"><label>Nome do Técnico</label><input name="coachName" value="${escapeHtml(d.coach?.name||'')}" placeholder="Nome do responsável técnico"></div><div class="field full"><label>Descrição</label><textarea name="description">${escapeHtml(d.team.description)}</textarea></div></div><div class="form-actions"><button class="btn btn-gold">Salvar informações</button></div></form></article>`;
   return '';
@@ -65,7 +65,10 @@ export function modalHtml(kind,item={}){
 
   if(kind==='event')return `<h2>${item.id?'Editar compromisso':'Novo compromisso'}</h2><form id="event-form" data-id="${item.id||''}"><div class="form-grid"><div class="field"><label>Tipo</label><select name="type"><option value="game" ${item.type==='game'?'selected':''}>Jogo</option><option value="training" ${item.type==='training'||!item.type?'selected':''}>Treino</option></select></div><div class="field"><label>Data *</label><input name="date" type="date" value="${item.date||todayIso()}" required></div><div class="field"><label>Horário</label><input name="time" type="time" value="${item.time||''}"></div><div class="field"><label>Local</label><input name="place" value="${escapeHtml(item.place||'')}"></div><div class="field full"><label>Título *</label><input name="title" value="${escapeHtml(item.title||'')}" required></div><div class="field full"><label>Adversário</label><input name="opponent" value="${escapeHtml(item.opponent||'')}"></div><div class="field full"><label>Observações</label><textarea name="notes">${escapeHtml(item.notes||'')}</textarea></div></div><div class="form-actions"><button class="btn btn-dark" type="button" data-action="close-modal">Cancelar</button><button class="btn btn-gold">Salvar</button></div></form>`;
 
-  if(kind==='news')return `<h2>${item.id?'Editar notícia':'Nova notícia'}</h2><form id="news-form" data-id="${item.id||''}"><div class="form-grid"><div class="field full"><label>Título *</label><input name="title" value="${escapeHtml(item.title||'')}" required></div><div class="field"><label>Data *</label><input name="date" type="date" value="${item.date||todayIso()}" required></div><div class="field full"><label>Notícia *</label><textarea name="body" required>${escapeHtml(item.body||'')}</textarea></div></div><div class="form-actions"><button class="btn btn-dark" type="button" data-action="close-modal">Cancelar</button><button class="btn btn-gold">Salvar</button></div></form>`;
+  if(kind==='news'){
+    const image=safeImageSrc(item.image||'');
+    return `<h2>${item.id?'Editar notícia':'Nova notícia'}</h2><form id="news-form" data-id="${item.id||''}">${image?`<div class="news-admin-preview"><img src="${escapeHtml(image)}" alt="Imagem atual da notícia"></div>`:''}<div class="form-grid"><div class="field full"><label>Título *</label><input name="title" value="${escapeHtml(item.title||'')}" required></div><div class="field"><label>Data *</label><input name="date" type="date" value="${item.date||todayIso()}" required></div><div class="field full"><label>Imagem da notícia <span class="form-help">(opcional)</span></label><input name="imageFile" type="file" accept="image/*"></div>${image?`<label class="check-row full"><input type="checkbox" name="removeNewsImage" value="1"><span>Remover imagem atual</span></label>`:''}<div class="field full"><label>Notícia *</label><textarea name="body" required>${escapeHtml(item.body||'')}</textarea></div></div><div class="form-actions"><button class="btn btn-dark" type="button" data-action="close-modal">Cancelar</button><button class="btn btn-gold">Salvar</button></div></form>`;
+  }
 
   return '';
 }
@@ -135,8 +138,12 @@ export async function saveAdminForm(form){
 
   if(form.id==='news-form'){
     let x=id?d.news.find(x=>x.id===id):null;
-    if(!x){x={id:uid('news')};d.news.push(x)}
-    Object.assign(x,{title:String(fd.get('title')).trim(),date:String(fd.get('date')),body:String(fd.get('body')).trim()});
+    if(!x){x={id:uid('news'),image:''};d.news.push(x)}
+    const file=fd.get('imageFile');
+    let image=x.image||'';
+    if(fd.get('removeNewsImage'))image='';
+    else if(file?.size)image=await compressImage(file,1600,.84);
+    Object.assign(x,{title:String(fd.get('title')).trim(),date:String(fd.get('date')),body:String(fd.get('body')).trim(),image});
     logAction(`Notícia salva: ${x.title}`);
   }
 
