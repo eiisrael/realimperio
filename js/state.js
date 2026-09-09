@@ -15,7 +15,7 @@ export const DEFAULT_DATA = {
   ],
   news: [{ id:'news_1', title:'Aplicativo do Real Império FC', body:'O novo espaço do Real Império FC já está em construção para reunir agenda, notícias, elenco e fotos do time em um só lugar.', date:'2026-09-08' }],
   players: [],
-  gallery: [{ id:'gal_1', image:'assets/logo-real-imperio.png', caption:'Escudo oficial do Real Império FC', date:'2026-09-08' }],
+  gallery: [{ id:'gal_1', image:'assets/logo-real-imperio.svg', caption:'Escudo oficial do Real Império FC', date:'2026-09-08' }],
   audit: []
 };
 
