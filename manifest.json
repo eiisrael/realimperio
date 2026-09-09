@@ -7,9 +7,9 @@
   "theme_color": "#b8181f",
   "icons": [
     {
-      "src": "assets/logo-real-imperio.png",
-      "sizes": "720x728",
-      "type": "image/png",
+      "src": "assets/logo-real-imperio.svg",
+      "sizes": "320x320",
+      "type": "image/svg+xml",
       "purpose": "any"
     }
   ]
