@@ -296,3 +296,78 @@ body {
   .event-card-compact { padding: 12px; }
   .event-card-compact .date-chip { width: 52px; min-width: 52px; height: 58px; }
 }
+
+/* Troca de foto diretamente pelo avatar */
+.account-photo-picker {
+  display: inline-grid;
+  justify-items: center;
+  gap: 10px;
+  margin: 0 auto;
+  cursor: pointer;
+  user-select: none;
+}
+.account-photo-frame {
+  position: relative;
+  display: block;
+  width: 156px;
+  height: 156px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.account-photo-frame .account-profile-photo {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.account-photo-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.76));
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+.account-photo-picker:hover .account-photo-overlay,
+.account-photo-picker:focus-within .account-photo-overlay {
+  opacity: 1;
+}
+.account-photo-picker:hover .account-profile-photo {
+  filter: brightness(.82);
+}
+.account-photo-hint {
+  color: var(--muted);
+  font-size: .72rem;
+}
+.account-photo-input {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+@media (max-width: 700px) {
+  .account-photo-frame {
+    width: 124px;
+    height: 124px;
+  }
+  .account-photo-overlay {
+    opacity: 1;
+    background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.78));
+    align-items: end;
+    padding-bottom: 12px;
+    font-size: .66rem;
+  }
+}
