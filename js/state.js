@@ -32,7 +32,7 @@ export function loadData(){
       team:{...clone(DEFAULT_DATA.team), ...(saved.team||{})},
       events:Array.isArray(saved.events)?saved.events:clone(DEFAULT_DATA.events),
       news:Array.isArray(saved.news)?saved.news:clone(DEFAULT_DATA.news),
-      players:Array.isArray(saved.players)?saved.players:[],
+      players:Array.isArray(saved.players)?saved.players.map(p=>({...p,goals:Math.max(0,Number.parseInt(p.goals,10)||0)})):[],
       gallery:Array.isArray(saved.gallery)?saved.gallery:clone(DEFAULT_DATA.gallery),
       audit:Array.isArray(saved.audit)?saved.audit:[]};
   } catch { return clone(DEFAULT_DATA); }
