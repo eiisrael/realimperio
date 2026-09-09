@@ -46,7 +46,10 @@ create table public.team_info (
   city text default 'Caruaru-PE',
   training_place text,
   founded text,
-  general_admin_email text,
+  coach_name text,
+  coach_photo_url text,
+  coach_whatsapp text,
+  coach_bio text,
   description text,
   lineup_formation text not null default '4-3-3',
   lineup_base_formation text not null default '4-3-3',
@@ -106,7 +109,7 @@ create policy "public read news" on public.news for select using (true);
 create policy "player insert own application" on public.players for insert with check (user_id = auth.uid());
 create policy "player update own application" on public.players for update using (user_id = auth.uid()) with check (user_id = auth.uid());
 
--- Administração
+-- Administração / Técnico
 create policy "admin manage players" on public.players for all using (public.is_admin()) with check (public.is_admin());
 create policy "admin manage team" on public.team_info for all using (public.is_admin()) with check (public.is_admin());
 create policy "admin manage events" on public.events for all using (public.is_admin()) with check (public.is_admin());
@@ -118,3 +121,4 @@ create policy "profile self update" on public.profiles for update using (id = au
 
 -- Storage sugerido para próxima etapa:
 -- bucket público: player-photos
+-- bucket público: coach-photos
