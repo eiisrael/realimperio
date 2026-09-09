@@ -1,0 +1,16 @@
+{
+  "name": "Real Império FC",
+  "short_name": "Real Império",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b0909",
+  "theme_color": "#b8181f",
+  "icons": [
+    {
+      "src": "assets/logo-real-imperio.png",
+      "sizes": "720x728",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
