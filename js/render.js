@@ -64,7 +64,7 @@ export function renderPublic(){
 export function renderAccount(){
   const v=$('#view-account'),s=state.session;
   if(!s){
-    v.innerHTML=`<div class="page-head"><div><span class="kicker">Área de acesso</span><h1>Entrar</h1><p>Administradores e jogadores cadastrados podem acessar por aqui.</p></div></div><article class="card account-card"><form id="login-form"><div class="form-grid"><div class="field full"><label>E-mail</label><input name="email" type="email" autocomplete="username" required></div><div class="field full"><label>Senha</label><input name="password" type="password" autocomplete="current-password" required></div></div><div class="form-actions"><button class="btn btn-gold btn-full" type="submit">Entrar</button></div><p class="form-help" style="margin-top:12px">Administração local ainda não configurada neste navegador? <a href="setup-local.html">Configurar acesso local</a>.</p></form></article>`;
+    v.innerHTML=`<div class="page-head"><div><span class="kicker">Área de acesso</span><h1>Entrar</h1><p>Administradores e jogadores cadastrados podem acessar por aqui.</p></div></div><article class="card account-card"><form id="login-form"><div class="form-grid"><div class="field full"><label>E-mail</label><input name="email" type="email" autocomplete="username" required></div><div class="field full"><label>Senha</label><input name="password" type="password" autocomplete="current-password" required></div></div><div class="form-actions"><button class="btn btn-gold btn-full" type="submit">Entrar</button></div><p class="login-register-hint">Ainda não possui cadastro? <button type="button" data-nav="register">Cadastre-se</button> para poder acessar seu perfil.</p></form></article>`;
     return;
   }
   if(isAdmin()){
