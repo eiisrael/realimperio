@@ -24,6 +24,7 @@ create table public.players (
   whatsapp text,
   position text,
   shirt_number text,
+  goals integer not null default 0 check (goals >= 0),
   bio text,
   photo_url text,
   status public.player_status not null default 'pending',
@@ -101,6 +102,7 @@ create policy "public read news" on public.news for select using (true);
 create policy "public read gallery" on public.gallery for select using (true);
 
 -- Jogador pode consultar/atualizar o próprio perfil de cadastro.
+-- Na implementação final, o saldo de gols deve ser atualizado somente pela administração.
 create policy "player insert own application" on public.players for insert with check (user_id = auth.uid());
 create policy "player update own application" on public.players for update using (user_id = auth.uid()) with check (user_id = auth.uid());
 
@@ -118,4 +120,3 @@ create policy "profile self update" on public.profiles for update using (id = au
 -- Storage sugerido para próxima etapa:
 -- bucket público: team-gallery
 -- bucket público: player-photos
--- uploads/escritas restritos a public.is_admin(), exceto eventual foto do próprio jogador.
