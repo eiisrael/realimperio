@@ -7,7 +7,12 @@ Aplicativo web responsivo do **Real Império FC**, de Indianópolis, Caruaru-PE.
 - Página inicial com identidade visual do time.
 - Agenda pública de jogos e treinos.
 - Informações do clube.
-- Elenco público com foto, posição, número e descrição.
+- Elenco público com foto, posição, número, descrição e saldo de gols.
+- **Escalação 4-3-3 interativa** na página inicial:
+  - foto ou iniciais do atleta dentro da posição;
+  - informações do jogador ao passar o mouse ou tocar no celular;
+  - nome, posição, camisa, saldo de gols e descrição;
+  - contador de posições titulares preenchidas.
 - Galeria **Extras** com fotos recentes.
 - Notícias do time.
 - Cadastro de jogador com nome, e-mail e senha.
@@ -19,6 +24,7 @@ Aplicativo web responsivo do **Real Império FC**, de Indianópolis, Caruaru-PE.
   - notícias;
   - fotos da galeria;
   - informações do time.
+- Editor visual da **Escalação** no painel administrativo: selecione um jogador e clique diretamente na posição desejada do mini campo.
 - Dados persistidos no navegador com `localStorage` durante a fase local.
 - Sessão mantida somente na aba/janela atual com `sessionStorage`.
 
@@ -54,7 +60,7 @@ As credenciais não ficam gravadas em texto puro no `localStorage`. O protótipo
 A interface é estática e já pode ser hospedada na Vercel. Para a próxima etapa, o arquivo `supabase-schema.sql` contém uma base de tabelas e políticas para migrarmos o armazenamento local para:
 
 - Supabase Auth para login;
-- PostgreSQL para jogadores, agenda, notícias e dados do time;
+- PostgreSQL para jogadores, saldo de gols, escalação, agenda, notícias e dados do time;
 - Supabase Storage para fotos;
 - Row Level Security (RLS) para separar acesso público, jogador e administrador.
 
@@ -63,10 +69,17 @@ A interface é estática e já pode ser hospedada na Vercel. Para a próxima eta
 ```text
 realimperio/
 ├─ assets/
-│  └─ logo-real-imperio.png
+│  └─ logo-real-imperio.svg
+├─ js/
+│  ├─ admin.js
+│  ├─ lineup.js
+│  ├─ render.js
+│  └─ state.js
 ├─ app.js
 ├─ index.html
+├─ lineup.css
 ├─ manifest.json
+├─ setup-local.html
 ├─ styles.css
 ├─ supabase-schema.sql
 └─ vercel.json
