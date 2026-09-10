@@ -16,7 +16,26 @@ function cleanNode(root){
   while((node=walker.nextNode()))cleanTextNode(node);
 }
 
+function loadPlayerUiEnhancements(){
+  if(!document.querySelector('link[data-ri-player-admin-modal]')){
+    const link=document.createElement('link');
+    link.rel='stylesheet';
+    link.href='player-admin-modal.css';
+    link.dataset.riPlayerAdminModal='1';
+    document.head.appendChild(link);
+  }
+
+  if(!document.querySelector('script[data-ri-player-assists-ui]')){
+    const script=document.createElement('script');
+    script.type='module';
+    script.src='js/player-assists-ui.js';
+    script.dataset.riPlayerAssistsUi='1';
+    document.body.appendChild(script);
+  }
+}
+
 cleanNode(document.body);
+loadPlayerUiEnhancements();
 
 new MutationObserver(mutations=>{
   for(const mutation of mutations){
