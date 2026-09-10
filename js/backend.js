@@ -112,6 +112,7 @@ export async function remoteAdminUpsertPlayer(player,password=''){
       position:player?.position||'',
       number:player?.number||'',
       goals:Math.max(0,Number.parseInt(player?.goals,10)||0),
+      assists:Math.max(0,Number.parseInt(player?.assists,10)||0),
       bio:player?.bio||'',
       photo:player?.photo||'',
       status:player?.status||'pending',
