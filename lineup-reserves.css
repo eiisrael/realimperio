@@ -1,0 +1,215 @@
+/* Banco de reservas — extensão isolada da escalação pública */
+.lineup-field-layout {
+  width: min(810px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 500px) minmax(220px, 250px);
+  justify-content: center;
+  align-items: start;
+  gap: 30px;
+}
+
+.lineup-field-layout > .lineup-pitch {
+  width: 100%;
+}
+
+.lineup-reserves-panel {
+  position: relative;
+  min-height: 320px;
+  padding: 18px 16px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(227,179,92,.28);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(227,179,92,.08), transparent 42%),
+    linear-gradient(160deg, rgba(18,13,13,.97), rgba(25,13,13,.94));
+  box-shadow: 0 18px 40px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.025);
+  overflow: visible;
+}
+
+.lineup-reserves-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 2px 14px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.lineup-reserves-head > div {
+  display: grid;
+  gap: 2px;
+}
+
+.lineup-reserves-kicker {
+  color: var(--muted);
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.lineup-reserves-head strong {
+  color: var(--cream);
+  font-family: Oswald, sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: .045em;
+}
+
+.lineup-reserves-count {
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(227,179,92,.3);
+  background: rgba(227,179,92,.1);
+  color: var(--gold-2);
+  font-size: .76rem;
+  font-weight: 900;
+}
+
+.lineup-reserves-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 22px 8px;
+}
+
+.lineup-reserve-node {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  z-index: 3;
+}
+
+.lineup-reserve-node:focus-within,
+.lineup-reserve-node:hover {
+  z-index: 80;
+}
+
+.lineup-reserve-player {
+  width: 46px;
+  height: 46px;
+  border-width: 2px;
+  box-shadow:
+    0 0 0 4px rgba(227,179,92,.11),
+    0 10px 20px rgba(0,0,0,.28);
+}
+
+.lineup-reserve-node .lineup-name {
+  max-width: 54px;
+  padding: 3px 6px;
+  font-size: .61rem;
+}
+
+/* No desktop o card de informações abre para o lado do banco,
+   preservando o mesmo conteúdo/efeito dos titulares sem cortar o painel. */
+.lineup-reserve-node .lineup-tooltip {
+  left: auto;
+  right: calc(100% + 14px);
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%) translateX(8px);
+}
+
+.lineup-reserve-node .lineup-tooltip::after {
+  display: none;
+}
+
+.lineup-reserve-node .lineup-player:hover + .lineup-tooltip,
+.lineup-reserve-node .lineup-player:focus + .lineup-tooltip,
+.lineup-reserve-node .lineup-player:focus-visible + .lineup-tooltip {
+  transform: translateY(-50%) translateX(0);
+}
+
+.lineup-reserves-empty {
+  min-height: 205px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 9px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.lineup-reserves-empty > span {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px dashed rgba(227,179,92,.4);
+  color: var(--gold-2);
+  font-family: Oswald, sans-serif;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+
+.lineup-reserves-empty p {
+  max-width: 170px;
+  margin: 0;
+  font-size: .72rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 880px) {
+  .lineup-field-layout {
+    width: min(500px, 100%);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .lineup-reserves-panel {
+    min-height: 0;
+  }
+
+  .lineup-reserve-node .lineup-tooltip {
+    left: 50%;
+    right: auto;
+    top: auto;
+    bottom: calc(100% + 16px);
+    transform: translateX(-50%) translateY(8px);
+  }
+
+  .lineup-reserve-node .lineup-player:hover + .lineup-tooltip,
+  .lineup-reserve-node .lineup-player:focus + .lineup-tooltip,
+  .lineup-reserve-node .lineup-player:focus-visible + .lineup-tooltip {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@media (max-width: 520px) {
+  .lineup-reserves-panel {
+    padding: 16px 14px 18px;
+    border-radius: 18px;
+  }
+
+  .lineup-reserves-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 12px;
+  }
+
+  .lineup-reserve-node:nth-child(odd) .lineup-tooltip {
+    left: 0;
+    right: auto;
+    transform: translateY(8px);
+  }
+
+  .lineup-reserve-node:nth-child(even) .lineup-tooltip {
+    left: auto;
+    right: 0;
+    transform: translateY(8px);
+  }
+
+  .lineup-reserve-node:nth-child(odd) .lineup-player:hover + .lineup-tooltip,
+  .lineup-reserve-node:nth-child(odd) .lineup-player:focus + .lineup-tooltip,
+  .lineup-reserve-node:nth-child(odd) .lineup-player:focus-visible + .lineup-tooltip,
+  .lineup-reserve-node:nth-child(even) .lineup-player:hover + .lineup-tooltip,
+  .lineup-reserve-node:nth-child(even) .lineup-player:focus + .lineup-tooltip,
+  .lineup-reserve-node:nth-child(even) .lineup-player:focus-visible + .lineup-tooltip {
+    transform: translateY(0);
+  }
+}
