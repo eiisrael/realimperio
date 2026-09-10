@@ -1,0 +1,22 @@
+/* Exibição integral das imagens de notícias — sem recorte */
+.news-modal-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  margin: 0 0 20px;
+  border-radius: 16px;
+  object-fit: contain;
+  object-position: center;
+  background: #0b0909;
+}
+
+@media (max-width: 700px) {
+  .news-modal-image {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+}
