@@ -1,0 +1,8 @@
+/* Jogadores — mantém o quadro atual e exibe a foto inteira sem recorte */
+#view-players .player-photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  object-position: center;
+  background: linear-gradient(145deg, #2c1919, #0e0b0b);
+}
