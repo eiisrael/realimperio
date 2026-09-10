@@ -1,9 +1,9 @@
-/* Exibição integral das imagens de notícias — sem recorte */
+/* Exibição integral das imagens de notícias dentro do quadro original — sem recorte */
 .news-modal-image {
   display: block;
   width: 100%;
-  height: auto;
-  max-height: none;
+  height: clamp(300px, 48vh, 460px);
+  max-height: 460px;
   margin: 0 0 20px;
   border-radius: 16px;
   object-fit: contain;
@@ -14,8 +14,8 @@
 @media (max-width: 700px) {
   .news-modal-image {
     width: 100%;
-    height: auto;
-    max-height: none;
+    height: clamp(220px, 42vh, 320px);
+    max-height: 320px;
     object-fit: contain;
     border-radius: 12px;
   }
