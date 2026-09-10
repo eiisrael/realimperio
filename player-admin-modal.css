@@ -1,0 +1,90 @@
+/* Painel administrativo — formulário de jogador compacto no desktop */
+@media (min-width: 761px) and (min-height: 680px) {
+  #modal:has(#player-admin-form) {
+    width: min(960px, calc(100% - 40px));
+    max-height: none;
+    overflow: visible;
+  }
+
+  #modal:has(#player-admin-form) .modal-card {
+    max-height: calc(100vh - 32px);
+    overflow: visible;
+    padding: 18px 22px 16px;
+  }
+
+  #modal:has(#player-admin-form) #modal-content > h2 {
+    margin: 0 44px 6px 0;
+    font-size: 1.35rem;
+  }
+
+  #player-admin-form .admin-player-preview {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 8px;
+  }
+
+  #player-admin-form .form-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px 10px;
+  }
+
+  #player-admin-form .field {
+    gap: 4px;
+  }
+
+  #player-admin-form .field.full {
+    grid-column: auto;
+  }
+
+  /* Linha 1: nome (2 colunas) + e-mail */
+  #player-admin-form .field:has([name="name"]) {
+    grid-column: span 2;
+  }
+
+  /* Linha 4: seletor da imagem + remoção da imagem */
+  #player-admin-form .field:has([name="photoFile"]) {
+    grid-column: span 2;
+  }
+
+  #player-admin-form .check-row.full {
+    grid-column: span 1;
+    align-self: end;
+    min-height: 38px;
+    padding: 8px 10px;
+  }
+
+  /* Linha final: descrição (2 colunas) + senha */
+  #player-admin-form .field:has(textarea[name="bio"]) {
+    grid-column: span 2;
+  }
+
+  #player-admin-form .field input,
+  #player-admin-form .field select,
+  #player-admin-form .field textarea {
+    min-height: 38px;
+    padding: 8px 10px;
+    border-radius: 10px;
+  }
+
+  #player-admin-form .field textarea[name="bio"] {
+    min-height: 68px;
+    height: 68px;
+    max-height: 68px;
+    resize: none;
+  }
+
+  #player-admin-form .form-actions {
+    margin-top: 10px;
+  }
+
+  #player-admin-form .form-actions .btn {
+    padding: 9px 14px;
+  }
+}
+
+/* Em telas pequenas a rolagem continua como fallback para não esconder controles. */
+@media (max-width: 760px), (max-height: 679px) {
+  #modal:has(#player-admin-form) .modal-card {
+    overflow: auto;
+  }
+}
