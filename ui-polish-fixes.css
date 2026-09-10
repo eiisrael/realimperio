@@ -1,0 +1,94 @@
+/* Ajustes pontuais de interface — escalação e miniaturas de notícias */
+
+/* Garante que qualquer foto de titular/reserva permaneça rigorosamente dentro do círculo. */
+.lineup-player {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.lineup-player > img,
+.lineup-tooltip-avatar > img {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  clip-path: circle(50% at 50% 50%);
+}
+
+/* Miniatura opcional nas notícias da página inicial. */
+.home-news-list .news-card-button.has-news-thumb {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+
+.news-card-thumb-wrap {
+  width: 112px;
+  height: 112px;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 13px;
+  border: 1px solid rgba(227,179,92,.2);
+  background: #0c0a0a;
+  box-shadow: 0 8px 22px rgba(0,0,0,.2);
+}
+
+.news-card-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.news-card-copy {
+  min-width: 0;
+}
+
+.home-news-list .has-news-thumb .news-card-copy h3 {
+  margin-top: 7px;
+}
+
+.home-news-list .has-news-thumb .news-card-copy p {
+  margin-top: 7px;
+}
+
+@media (max-width: 520px) {
+  .home-news-list .news-card-button.has-news-thumb {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 11px;
+    padding: 14px;
+  }
+
+  .news-card-thumb-wrap {
+    width: 88px;
+    height: 88px;
+    border-radius: 11px;
+  }
+
+  .home-news-list .has-news-thumb .news-card-copy h3 {
+    font-size: 1rem;
+    margin: 5px 0 5px;
+  }
+
+  .home-news-list .has-news-thumb .news-card-copy p {
+    font-size: .82rem;
+    line-height: 1.45;
+    margin: 5px 0 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .home-news-list .has-news-thumb .news-read-more {
+    margin-top: 8px;
+  }
+}
