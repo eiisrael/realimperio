@@ -16,6 +16,13 @@ function cleanNode(root){
   while((node=walker.nextNode()))cleanTextNode(node);
 }
 
+function fixManifestHref(){
+  const manifest=document.querySelector('link[rel="manifest"]');
+  if(manifest&&manifest.getAttribute('href')!=='/manifest.json'){
+    manifest.setAttribute('href','/manifest.json');
+  }
+}
+
 function loadPlayerUiEnhancements(){
   if(!document.querySelector('link[data-ri-player-admin-modal]')){
     const link=document.createElement('link');
@@ -34,8 +41,28 @@ function loadPlayerUiEnhancements(){
   }
 }
 
+function loadVisualPolish(){
+  if(!document.querySelector('link[data-ri-ui-polish]')){
+    const link=document.createElement('link');
+    link.rel='stylesheet';
+    link.href='ui-polish-fixes.css';
+    link.dataset.riUiPolish='1';
+    document.head.appendChild(link);
+  }
+
+  if(!document.querySelector('script[data-ri-news-thumbnails]')){
+    const script=document.createElement('script');
+    script.type='module';
+    script.src='js/news-card-thumbnails.js';
+    script.dataset.riNewsThumbnails='1';
+    document.body.appendChild(script);
+  }
+}
+
+fixManifestHref();
 cleanNode(document.body);
 loadPlayerUiEnhancements();
+loadVisualPolish();
 
 new MutationObserver(mutations=>{
   for(const mutation of mutations){
