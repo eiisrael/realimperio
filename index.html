@@ -7,7 +7,13 @@
   <meta name="description" content="Aplicativo oficial do Real Império FC, Indianópolis, Caruaru-PE." />
   <title>Real Império FC</title>
   <link rel="icon" href="assets/logo-real-imperio.svg" />
-  <link rel="manifest" href="manifest.json" />
+  <link rel="manifest" id="app-manifest" />
+  <script>
+    (() => {
+      const manifest = document.getElementById('app-manifest');
+      if (manifest) manifest.href = new URL('/manifest.json', window.location.origin).href;
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
