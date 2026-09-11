@@ -18,9 +18,9 @@ function cleanNode(root){
 
 function fixManifestHref(){
   const manifest=document.querySelector('link[rel="manifest"]');
-  if(manifest&&manifest.getAttribute('href')!=='/manifest.json'){
-    manifest.setAttribute('href','/manifest.json');
-  }
+  if(!manifest)return;
+  const manifestUrl=new URL('/manifest.json',window.location.origin).href;
+  if(manifest.href!==manifestUrl)manifest.href=manifestUrl;
 }
 
 function loadPlayerUiEnhancements(){
